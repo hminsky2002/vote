@@ -4,20 +4,18 @@ threadsafe: true
 
 handlers:
 
+- url: /$
+  static_files: www/index.html
+  upload: www/index.html
+
 - url: /sql/test
   script: sql.test.app
   secure: always
 
-
-#- url: /sql/test
-#  script: test.app
-
-#- url: /(.*)
-#  static_files: www/\1
-#  upload: www/(.*)
-#  secure: always  
-
-
+- url: /(.*)
+  static_files: www/\1
+  upload: www/(.*)
+  secure: always  
 
 libraries:
 - name: MySQLdb
