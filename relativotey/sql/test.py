@@ -65,19 +65,23 @@ class MainPage(webapp2.RequestHandler):
         """Simple request handler that shows all of the MySQL variables."""
         self.response.headers['Content-Type'] = 'text/plain'
 
-        db = connect_to_cloudsql()
-        cursor = db.cursor()
-        town = self.request.get('town')
-        # python tuple syntax sux, that's why you need "(town,)" to make a single element tuple
-        cursor.execute('SELECT sum(Registered_Voters) as vcount FROM voter.voters WHERE town=%s', (town,))
+        try:
+            db = connect_to_cloudsql()
+            cursor = db.cursor()
+            town = self.request.get('town')
+            # python tuple syntax sux, that's why you need "(town,)" to make a single element tuple
+            cursor.execute('SELECT sum(Registered_Voters) as vcount FROM voter.voters WHERE town=%s', (town,))
 
-        r = cursor.fetchone()
-        vcount = int(r[0])
-        # { registered: 59028 } 
+            r = cursor.fetchone()
+            # you get back a "Decimal" object from sql, need to convert to int in order to serialize to JSON
+            vcount = int(r[0])
+            results = {"registered": vcount, "town": town}
 
-        results = {"registered": vcount, "town": town}
+            self.response.write(json.dumps(results))
 
-        self.response.write(json.dumps(results))
+        #except MySQLdb.Error, e:
+        except Exception as e:
+            print "Error %d: %s" % (e.args[0], e.args[1])
 
 
 app = webapp2.WSGIApplication([
