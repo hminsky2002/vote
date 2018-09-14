@@ -73,7 +73,7 @@ class MainPage(webapp2.RequestHandler):
 
 
 app = webapp2.WSGIApplication([
-    ('/', MainPage),
+    ('/sql/test', MainPage),
 ], debug=True)
 
 # [END gae_python_mysql_app]

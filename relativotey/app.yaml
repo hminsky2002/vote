@@ -4,15 +4,20 @@ threadsafe: true
 
 handlers:
 
-- url: /
-  static_files: www/index.html
-  upload: www/index.html
-  secure: always 
+- url: /sql/test
+  script: sql.test.app
+  secure: always
 
-- url: /(.*)
-  static_files: www/\1
-  upload: www/(.*)
-  secure: always  
+
+#- url: /sql/test
+#  script: test.app
+
+#- url: /(.*)
+#  static_files: www/\1
+#  upload: www/(.*)
+#  secure: always  
+
+
 
 libraries:
 - name: MySQLdb
@@ -20,7 +25,7 @@ libraries:
 
 # [START gae_python_mysql_env]
 env_variables:
-    CLOUDSQL_CONNECTION_NAME: massive-sandbox-214902:us-central1:voter
+    CLOUDSQL_CONNECTION_NAME: votedb-216400:us-central1:votedb-a
     CLOUDSQL_USER: root
     CLOUDSQL_PASSWORD: theusual
 
