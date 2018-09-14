@@ -30,6 +30,9 @@ class MainPage(webapp2.RequestHandler):
     def get(self):
         """Simple request handler that shows all of the MySQL variables."""
         self.response.headers['Content-Type'] = 'text/plain'
+        town = self.request.get('town')
+        self.response.write("town = {}\n".format((town)))
+        self.response.write('\n\n')
         self.response.write("hello there, Hoser!")
 
 

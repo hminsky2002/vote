@@ -22,6 +22,10 @@ For more information, see the README.md.
 # [START gae_python_mysql_app]
 import os
 
+#import pymysql
+#pymysql.install_as_MySQLdb()
+
+
 import MySQLdb
 import webapp2
 import json
@@ -64,17 +68,25 @@ class MainPage(webapp2.RequestHandler):
     def get(self):
         """Simple request handler that shows all of the MySQL variables."""
         self.response.headers['Content-Type'] = 'text/plain'
+        try:
+            db = connect_to_cloudsql()
+            cursor = db.cursor()
 
-        db = connect_to_cloudsql()
-        cursor = db.cursor()
-        town = self.request.get('town')
-        # python tuple syntax sux, that's why you need "(town,)" to make a single element tuple
-        cursor.execute('SELECT sum(Registered_Voters) as vcount FROM voter.voters WHERE town=%s', (town,))
+            town = self.request.get('town')
+            self.response.write(town)
+            return
+            cursor.execute('select sum(Registered_Voters) as vcount from voter.voters where town = %s', town)
+            
+            if cursor.rowcount > 0:
+                r = cursor.fetchone()
+                self.response.write('{}'.format(json.dumps(r)))
 
-        self.response.write("town = {}\n".format((town)))
-        self.response.write('\n\n')
-        r = cursor.fetchone()
-        self.response.write('{}\n'.format(r))
+            else:
+                self.response.write('no_ items_found')
+        
+        except MySQLdb.Error, e:
+            print "Error %d: %s" % (e.args[0], e.args[1])
+
 
 
 app = webapp2.WSGIApplication([
