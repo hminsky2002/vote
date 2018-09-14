@@ -4,14 +4,14 @@ threadsafe: true
 
 handlers:
 
+- url: /sql/(.*)
+  script: sql.\1.app
+
 - url: /$
   static_files: www/index.html
   upload: www/index.html
   secure: always
 
-- url: /sql/test
-  script: sql.test.app
-  secure: always
 
 - url: /(.*)
   static_files: www/\1
