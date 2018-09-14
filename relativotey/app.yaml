@@ -3,11 +3,26 @@ api_version: 1
 threadsafe: true
 
 handlers:
+
 - url: /
   static_files: www/index.html
   upload: www/index.html
-  secure: always
+  secure: always 
+
 - url: /(.*)
   static_files: www/\1
   upload: www/(.*)
-  secure: always
+  secure: always  
+
+libraries:
+- name: MySQLdb
+  version: "latest"
+
+# [START gae_python_mysql_env]
+env_variables:
+    CLOUDSQL_CONNECTION_NAME: massive-sandbox-214902:us-central1:voter
+    CLOUDSQL_USER: root
+    CLOUDSQL_PASSWORD: theusual
+
+# [END gae_python_mysql_env]
+
