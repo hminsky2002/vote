@@ -67,12 +67,11 @@ class MainPage(webapp2.RequestHandler):
 
         db = connect_to_cloudsql()
         cursor = db.cursor()
-        town = 'newton'
-#        cursor.execute("select sum(Registered_Voters) as vcount from voter.voters where town = %s", (town))
+        cursor.execute('SELECT * FROM voter.voters')
 
-#        for r in cursor.fetchall():
-#            self.response.write(json.dumps(r))
-        self.response.write("ok, got here at least.")
+        for r in cursor.fetchall():
+            self.response.write('{}\n'.format(json.dumps(r)))
+
 
 
 app = webapp2.WSGIApplication([
