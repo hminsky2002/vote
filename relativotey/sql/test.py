@@ -24,6 +24,7 @@ import os
 
 import MySQLdb
 import webapp2
+import json
 
 
 # These environment variables are configured in app.yaml.
@@ -66,14 +67,16 @@ class MainPage(webapp2.RequestHandler):
 
         db = connect_to_cloudsql()
         cursor = db.cursor()
-        cursor.execute('SELECT * FROM voter.voters')
+        town = 'newton'
+#        cursor.execute("select sum(Registered_Voters) as vcount from voter.voters where town = %s", (town))
 
-        for r in cursor.fetchall():
-            self.response.write('{}\n'.format(r))
+#        for r in cursor.fetchall():
+#            self.response.write(json.dumps(r))
+        self.response.write("ok, got here at least.")
 
 
 app = webapp2.WSGIApplication([
-    ('/sql/test', MainPage),
+    ('/', MainPage),
 ], debug=True)
 
 # [END gae_python_mysql_app]

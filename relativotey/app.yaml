@@ -7,6 +7,7 @@ handlers:
 - url: /$
   static_files: www/index.html
   upload: www/index.html
+  secure: always
 
 - url: /sql/test
   script: sql.test.app
