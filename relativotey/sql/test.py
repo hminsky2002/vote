@@ -71,10 +71,13 @@ class MainPage(webapp2.RequestHandler):
         # python tuple syntax sux, that's why you need "(town,)" to make a single element tuple
         cursor.execute('SELECT sum(Registered_Voters) as vcount FROM voter.voters WHERE town=%s', (town,))
 
-        self.response.write("town = {}\n".format((town)))
-        self.response.write('\n\n')
         r = cursor.fetchone()
-        self.response.write('{}\n'.format(r))
+        vcount = int(r[0])
+        # { registered: 59028 } 
+
+        results = {"registered": vcount, "town": town}
+
+        self.response.write(json.dumps(results))
 
 
 app = webapp2.WSGIApplication([
