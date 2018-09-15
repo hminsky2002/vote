@@ -154,7 +154,12 @@
 	     caption = `If you had voted in the ${electionData.year} ${city} ${electionName} election, your vote would be worth ${ratio.toPrecision(3)*100}% of its original value in a full turn-out election`
 	 }
      } else {
-	 caption = `Sorry we don't have data on your city, ${city}, for any recent ${electionName} election`;
+	 // No election data, either no city was entered or there's no data for it
+	 if (city == "") {
+	     caption = `Please enter a city name`;
+	 } else {
+	     caption = `Sorry we don't have election data on your city, ${city}, for any recent ${electionName} election`;
+	 }
 	 
      }
      $("#caption").html(caption)
@@ -287,13 +292,13 @@
      geocoder.geocode({'address': address}, function(results, status) {
          if (status === 'OK') {
 	     addr = results;
-             resultsMap.setCenter(results[0].geometry.location);
-             var marker = new google.maps.Marker({
+	     resultsMap.setCenter(results[0].geometry.location);
+	     var marker = new google.maps.Marker({
 		 map: resultsMap,
 		 position: results[0].geometry.location
-             });
+	     });
          } else {
-             alert('Geocode was not successful for the following reason: ' + status);
+	     alert('Geocode was not successful for the following reason: ' + status);
          }
      });
  }
