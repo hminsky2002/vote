@@ -1,0 +1,9 @@
+{% for foo in bar %}
+<div class="row">
+    {% if foo.startswith('f') %}
+    <b>{{ foo }}</b>
+    {% else %}
+    {{foo}}
+    {% endif %}
+</div>
+{% endfor %}

@@ -20,7 +20,11 @@ handlers:
 
 libraries:
 - name: MySQLdb
-  version: "latest"
+  version: latest
+- name: jinja2
+  version: latest
+  
+
 
 # [START gae_python_mysql_env]
 env_variables:
