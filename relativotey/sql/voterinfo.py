@@ -9,6 +9,7 @@ using App Engine's native unix socket or using TCP when running locally.
 
 # [START gae_python_mysql_app]
 import os
+import math
 
 import MySQLdb
 import webapp2
@@ -50,24 +51,21 @@ class MainPage(webapp2.RequestHandler):
         """Makes a SQL query to voter db, returns result as JSON"""
         self.response.headers['Content-Type'] = 'text/plain'
 
-        try:
-            db = connect_to_cloudsql()
-            cursor = db.cursor()
-            town = self.request.get('town')
-            # python tuple syntax sux, that's why you need "(town,)" to make a single element tuple
-            cursor.execute('SELECT sum(Registered_Voters) as vcount FROM voters WHERE town=%s', (town,))
+        db = connect_to_cloudsql()
+        cursor = db.cursor()
+        town = self.request.get('town')
+        # python tuple syntax sux, that's why you need "(town,)" to make a single element tuple
+        cursor.execute('SELECT sum(Registered_Voters) as vcount FROM voters WHERE town=%s', (town,))
 
-            r = cursor.fetchone()
-            # you get back a "Decimal" object from sql, need to convert to int in order to serialize to JSON
-            vcount = int(r[0])
-            results = {"registered": vcount, "town": town}
+        r = cursor.fetchone()
+        # you get back a "Decimal" object from sql, need to convert to int in order to serialize to JSON
+        vcount = int(r[0])
+        results = { "registered": vcount,
+                    "voted": math.floor(vcount * 0.4),
+                    "town": town,
+                    "year": 2016 }
 
-            self.response.write(json.dumps(results))
-
-        #except MySQLdb.Error, e:
-        except Exception as e:
-            print "Error %d: %s" % (e.args[0], e.args[1])
-
+        self.response.write(json.dumps(results))
 
 app = webapp2.WSGIApplication([
     ('.*', MainPage),

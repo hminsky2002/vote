@@ -2,6 +2,12 @@ runtime: python27
 api_version: 1
 threadsafe: true
 
+# env: flex
+
+# automatic_scaling:
+#   max_num_instances: 1
+
+
 handlers:
 
 - url: /sql/(.*)
@@ -24,6 +30,17 @@ libraries:
 - name: jinja2
   version: latest
   
+skip_files:
+- ^(.*/)?\~$
+- ^penv/.*
+- .DS_Store
+
+
+# https://cloud.google.com/appengine/docs/flexible/python/using-cloud-sql
+# For SQL_ALCHEMY 
+beta_settings:
+    cloud_sql_instances: votedb-216400:us-central1:votedb-a
+
 
 
 # [START gae_python_mysql_env]
@@ -31,6 +48,11 @@ env_variables:
     CLOUDSQL_CONNECTION_NAME: votedb-216400:us-central1:votedb-a
     CLOUDSQL_USER: root
     CLOUDSQL_PASSWORD: theusual
+
+    # Replace user, password, database, and instance connection name with the values obtained
+    # when configuring your Cloud SQL instance.
+    SQLALCHEMY_DATABASE_URI: >-
+      mysql+pymysql://root:theusual@/voter?unix_socket=/cloudsql/votedb-216400:us-central1:votedb-a
 
 # [END gae_python_mysql_env]
 
