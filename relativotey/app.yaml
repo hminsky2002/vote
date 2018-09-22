@@ -1,11 +1,11 @@
-runtime: python27
+runtime: python
 api_version: 1
 threadsafe: true
 
-# env: flex
+env: flex
 
-# automatic_scaling:
-#   max_num_instances: 1
+automatic_scaling:
+  max_num_instances: 1
 
 
 handlers:
@@ -24,11 +24,11 @@ handlers:
   upload: www/(.*)
   secure: always  
 
-libraries:
-- name: MySQLdb
-  version: latest
-- name: jinja2
-  version: latest
+# libraries:
+#  - name: MySQLdb
+#    version: latest
+#  - name: jinja2
+#    version: latest
   
 skip_files:
 - ^(.*/)?\~$
