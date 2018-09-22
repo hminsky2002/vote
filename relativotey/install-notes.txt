@@ -1,0 +1,81 @@
+1. `brew install mysql` # install mysql
+2. `brew unlink mysql` 
+3. `brew install mysql-connector-c`
+4. `export PATH=/usr/local/Cellar/mysql/8.0.11/bin:$PATH` # update path and set the mysql bin folder to path
+sudo ln -s /usr/local/Cellar/mysql/5.7.19/lib/libmysqlclient.20.dylib   /usr/local/Cellar/lib/libmysqlclient.21.dylib` # create symlink 
+6. `pip install mysql-python` # install mysql-python finally
+
+
+
+$.getJSON('/sql/voterinfo?town=dover', function(d) {
+			   console.log(JSON.stringify(d));
+               });
+
+////////////////////////////////////////////////////////////////
+// Lets try a more recent version of python and a different mysql client that might run
+// locally and on app engine
+// sql_alchemy
+
+virtualenv -p python3 penv
+
+virtualenv -p /usr/bin/python2.7 penv27
+
+. ./penv27/bin/activate
+
+//pip install google-cloud
+pip install flask
+pip install flask-sqlalchemy
+pip install gunicorn
+pip install pymysql
+
+
+gcloud auth login
+
+https://cloud.google.com/appengine/docs/flexible/python/using-cloud-sql
+
+https://github.com/GoogleCloudPlatform/python-docs-samples/blob/4831bbae7d088286bb7d0e8cb0ca7a27e601b9ea/appengine/flexible/cloudsql/main.py
+
+$ export SQLALCHEMY_DATABASE_URI=[your connection string]
+$ python main.py
+
+export SQLALCHEMY_DATABASE_URI="mysql+pymysql://root:theusual@/voter?unix_socket=/cloudsql/votedb-216400:us-central1:votedb-a"
+
+export SQLALCHEMY_DATABASE_URI=mysql+pymysql://root:theusual@/voter
+
+dev_appserver.py $PWD
+
+export CLOUDSDK_PYTHON=/usr/local/bin/python2
+./google-cloud-sdk/install.sh
+
+
+
+
+================================================================
+Just go to the google-cloud-sdk folder and open the install.sh file.
+
+Change the CLOUDSDK_PYTHON="python" value to CLOUDSDK_PYTHON="python2.7"
+
+Rerun the install with the command
+
+./install.sh
+in the same folder and follow the prompts.
+
+
+
+
+================================================================
+
+
+https://cloud.google.com/appengine/docs/flexible/python/quickstart
+
+virtualenv -p /usr/bin/python  py27
+source py27/bin/activate
+
+cd src/vote/relativotey
+pip install  -r requirements.txt
+
+
+
+ERROR: (gcloud.app.deploy) skip_files cannot be used with the [python36] runtime. Ignore patterns are instead expressed in a .gcloudignore file. For information on the format and syntax of .gcloudignore files, see https://cloud.google.com/sdk/gcloud/reference/topic/gcloudignore.
+
+
