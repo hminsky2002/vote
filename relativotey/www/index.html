@@ -14,7 +14,7 @@
 </head>
 <body>
 
-<img src="new-logo.png" alt="Relitvotey"  width="400">
+<img src="new-logo.png" alt="Relativotey"  width="400">
 
 
 
@@ -75,11 +75,6 @@
 	<option value="WI">Wisconsin</option>
 	<option value="WY">Wyoming</option>
     </select>
-    <select id=electiontype>
-    <option value="mayoral">Mayoral</option>
-    <option value="senate">Senate</option>
-    <option value="congress">Congressional</option>
-    </select>
     <button id=lbutton>How Much Is My Vote Worth?!</button>
     <br>
     <br>
@@ -108,61 +103,48 @@
 <script>
  var MAN_WIDTH=100
 
- var edb = {
-     mayoral: {
-         "newton": { registered: 59028, voted: 24564, year: 2017},
-     },
-     senate: {
-	 "newton":{ registered: 4534974, voted: 2186789, year: 2014}
-     },
-     congress: {
-	 "newton":{ registered: 544688, voted: 395304, year: 2016}
-     }
- }
-
-
  // http://relativotey.org/code/voterinfo?town=Brookline  --> {...}
  
- function showVoterInfo() {
-     var city = $("#city").val();
-     var electiontype = $("#electiontype").val();
+ var electionData = null;
 
-     // Look up election data from 'database', we will make this an SQL query when we have a real db
-     var electionData = edb[electiontype][city.toLowerCase()];
+ function showVoterInfo(city) {
+     // Make this string safe to pass in URL
+     var encodedCity = encodeURI(city);
+     var url = `/sql/newsql?town=${encodedCity}`;
+     
+     $.getJSON(url, function(mydata) {
+	 console.log("got data from voterinfo: ", JSON.stringify(mydata));
+	 electionData = mydata;
 
-     console.log("election data = ",electionData);
-     var caption = "";
+	 // Look up election data from 'database', we will make this an SQL query when we have a real db
+	 //var electionData = edb[city.toLowerCase()];
 
-     var electionName;
-     if (electiontype == "mayoral"){
-	 electionName = "mayoral";
-     } else if (electiontype == "senate"){
-	 electionName = "senatorial";
-     } else if (electiontype == "congress"){
-	 electionName = "congressional";
-     }
+	 console.log("election data = ",electionData);
+	 var caption = "";
 
-     if (electionData){
-	 
-	 //$("#caption").html("You entered a city of "+city + " registered = "+electionData.registered+ ", voted = "+electionData.voted);
-	 var ratio =  electionData.registered / electionData.voted;
-	 $('#men').width(MAN_WIDTH * ratio);
+	 if (electionData != null){
+	     
+	     //$("#caption").html("You entered a city of "+city + " registered = "+electionData.registered+ ", voted = "+electionData.voted);
+	     var ratio =  electionData.registered / electionData.voted;
+	     $('#men').width(MAN_WIDTH * ratio);
 
-	 if (ratio >= 2) {
-	     caption = `If you had voted in the ${electionData.year} ${city} ${electionName} election, your vote would have the weight of ${ratio.toPrecision(3)} registered voters in a full turn-out election`;
+	     if (ratio >= 2) {
+		 caption = `If you had voted in the ${electionData.year} ${city} congressional election, your vote would have the weight of ${ratio.toPrecision(3)} registered voters in a full turn-out election`;
+	     } else {
+		 caption = `If you had voted in the ${electionData.year} ${city} congressional election, your vote would be worth ${ratio.toPrecision(3)*100}% of its original value in a full turn-out election`
+	     }
 	 } else {
-	     caption = `If you had voted in the ${electionData.year} ${city} ${electionName} election, your vote would be worth ${ratio.toPrecision(3)*100}% of its original value in a full turn-out election`
+	     // No election data, either no city was entered or there's no data for it
+	     if (city == "") {
+		 caption = `Please enter a city name`;
+	     } else {
+		 caption = `Sorry we don't have election data on your city, ${city}, for any recent congressional election`;
+	     }
+	     
 	 }
-     } else {
-	 // No election data, either no city was entered or there's no data for it
-	 if (city == "") {
-	     caption = `Please enter a city name`;
-	 } else {
-	     caption = `Sorry we don't have election data on your city, ${city}, for any recent ${electionName} election`;
-	 }
-	 
-     }
-     $("#caption").html(caption)
+	 $("#caption").html(caption)
+
+     });
  }
 
  
@@ -193,7 +175,8 @@
      city = city + ", " + $("#states").val();
      console.log("user entered location "+city);
      geocodeAddress(city,geocoder,map);
-     showVoterInfo();
+     var city = $("#city").val();
+     showVoterInfo(city);
  }
 
  /** Display city's location on map, using city name from input field */
@@ -261,7 +244,7 @@
 			 city = getCityNameFromResults(addr)
 			 $("#city").val(city);
 
-			 showVoterInfo();
+			 showVoterInfo(city);
 
 
 			 infoWindow.setContent(results[0].formatted_address);
