@@ -22,6 +22,14 @@ import math
 
 app = Flask(__name__)
 
+
+try:
+  import googleclouddebugger
+  googleclouddebugger.enable()
+except ImportError:
+  pass
+
+
 # [START example]
 # Environment variables are defined in app.yaml.
 if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine/'):

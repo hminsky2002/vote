@@ -110,7 +110,7 @@
  function showVoterInfo(city) {
      // Make this string safe to pass in URL
      var encodedCity = encodeURI(city);
-     var url = `/sql/newsql?town=${encodedCity}`;
+     var url = `/sql/voterinfo?town=${encodedCity}`;
      
      $.getJSON(url, function(mydata) {
 	 console.log("got data from voterinfo: ", JSON.stringify(mydata));
