@@ -4,9 +4,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
   $(document).ready(function(){
-      $("#city").keypress(function( event ) {
+      $("#state").keypress(function( event ) {
 	  if ( event.which == 13 ) {
-	      lookupCityFromInput();
+	      lookupStateFromInput();
 	  }
       });
 });
@@ -18,11 +18,10 @@
 
 
 
-<h2>Enter City</h2>
+<h2>Enter State</h2>
 
 
-  <input id=city width=200/>
-   <select id=states >
+   <select id=state >
 	<option value="AL">Alabama</option>
 	<option value="AK">Alaska</option>
 	<option value="AZ">Arizona</option>
@@ -107,38 +106,38 @@
  
  var electionData = null;
 
- function showVoterInfo(city) {
+ function showVoterInfo(state) {
      // Make this string safe to pass in URL
-     var encodedCity = encodeURI(city);
-     var url = `/sql/voterinfo?town=${encodedCity}`;
+     var encodedState = encodeURI(state);
+     var url = `/sql/voterinfo?state=${encodedState}`;
      
      $.getJSON(url, function(mydata) {
 	 console.log("got data from voterinfo: ", JSON.stringify(mydata));
 	 electionData = mydata;
 
 	 // Look up election data from 'database', we will make this an SQL query when we have a real db
-	 //var electionData = edb[city.toLowerCase()];
+	 //var electionData = edb[state.toLowerCase()];
 
 	 console.log("election data = ",electionData);
 	 var caption = "";
 
 	 if (electionData != null && electionData.data_found){
 	     
-	     //$("#caption").html("You entered a city of "+city + " registered = "+electionData.registered+ ", voted = "+electionData.voted);
+	     //$("#caption").html("You entered a state of "+state + " registered = "+electionData.registered+ ", voted = "+electionData.voted);
 	     var ratio =  electionData.registered / electionData.voted;
 	     $('#men').width(MAN_WIDTH * ratio);
 
 	     if (ratio >= 2) {
-		 caption = `If you had voted in the ${electionData.year} ${city} congressional election, your vote would have the weight of ${ratio.toPrecision(3)} registered voters in a full turn-out election`;
+		 caption = `If you had voted in the ${electionData.year} ${state} congressional election, your vote would have the weight of ${ratio.toPrecision(3)} registered voters in a full turn-out election`;
 	     } else {
-		 caption = `If you had voted in the ${electionData.year} ${city} congressional election, your vote would be worth ${ratio.toPrecision(3)*100}% of its original value in a full turn-out election`
+		 caption = `If you had voted in the ${electionData.year} ${state} congressional election, your vote would be worth ${ratio.toPrecision(3)*100}% of its original value in a full turn-out election`
 	     }
 	 } else {
-	     // No election data, either no city was entered or there's no data for it
-	     if (city == "") {
-		 caption = `Please enter a city name`;
+	     // No election data, either no state was entered or there's no data for it
+	     if (state == "") {
+		 caption = `Please enter a state name`;
 	     } else {
-		 caption = `Sorry we don't have election data on your city, ${city}, for any recent congressional election`;
+		 caption = `Sorry we don't have election data on your state, ${state}, for any recent congressional election`;
 	     }
 	     
 	 }
@@ -168,31 +167,29 @@
 
 
  /**
-    Grab the CITY from input text field, and look up using geocoder, display on map
+    Grab the STATE from input text field, and look up using geocoder, display on map
   */
- function lookupCityFromInput() {
-     var city = $("#city").val();
-     city = city + ", " + $("#states").val();
-     console.log("user entered location "+city);
-     geocodeAddress(city,geocoder,map);
-     var city = $("#city").val();
-     showVoterInfo(city);
+ function lookupStateFromInput() {
+     var state = $("#state").val();
+     console.log("user entered location "+state);
+     geocodeAddress(state,geocoder,map);
+     showVoterInfo(state);
  }
 
  /** Display city's location on map, using city name from input field */
  function locate() {
-     var city = $("#city").val();
-     if (city === undefined) {
-	 $("#caption").html("Please enter a city name");	
+     var state = $("#state").val();
+     if (state === undefined) {
+	 $("#caption").html("Please enter a state name");	
      } else {
-	 lookupCityFromInput();
+	 lookupStateFromInput();
 
 
      }
  }
 
- function getCityNameFromResults(results) {
-     var cityname = null;
+ function getStateNameFromResults(results) {
+     var statename = null;
 
      for (index in results) {
 	 var entry = results[index];
@@ -203,13 +200,13 @@
 	     var long_name = addr.long_name;
 	     var types = addr.types;
 	     if (types.includes("locality")){
-		 cityname = long_name;
+		 statename = long_name;
 		 break;
 	     }
 	 }
      }
 
-     return cityname;
+     return statename;
  }
 
 
@@ -241,10 +238,10 @@
 			 //var geozip = a1.formatted_address.match(/,\s\w{2}\s(\d{5})/)[1];
 			 //console.log("geozip = "+geozip);
 			 //$("#zip").val(geozip);
-			 city = getCityNameFromResults(addr)
-			 $("#city").val(city);
+			 state = getStateNameFromResults(addr)
+			 $("#state").val(state);
 
-			 showVoterInfo(city);
+			 showVoterInfo(state);
 
 
 			 infoWindow.setContent(results[0].formatted_address);

@@ -56,9 +56,16 @@ class MainPage(webapp2.RequestHandler):
 
         db = connect_to_cloudsql()
         cursor = db.cursor()
-        town = self.request.get('town')
+        state = self.request.get('state')
         # python tuple syntax sux, that's why you need "(town,)" to make a single element tuple
-        cursor.execute('SELECT sum(Registered_Voters) as vcount, count(*) as total FROM voters WHERE town=%s', (town,))
+        cursor.execute('SELECT
+          Voting_Eligible_Population_VEP AS eligble,
+          Total_Ballots_Counted AS ballots,
+          Year
+        FROM
+          turnout
+        WHERE
+          state = %s',(state,))
 
         r = cursor.fetchone()
         # you get back a "Decimal" object from sql, need to convert to int in order to serialize to JSON
@@ -66,16 +73,20 @@ class MainPage(webapp2.RequestHandler):
         logging.info("r[0]  = ", r[0])
         logging.info("r[1]  = ", r[1])
         if (r is None) or (r[0] is None):
-            vcount = 0
+            eligble = 0
+            ballots = 0
+            year = 2014
         else:
-            vcount = int(r[0])
+            eligble = int(r[0])
+            ballots = int(r[1])
+            year = int(r[2])
             dataFound = True
             
         results = { "data_found": dataFound,
-                    "registered": vcount,
-                    "voted": math.floor(vcount * 0.4),
-                    "town": town,
-                    "year": 2016 }
+                    "registered": eligble,
+                    "voted": ballots,
+                    "state": state,
+                    "year": year }
 
         logging.info("results = ",results)
 
