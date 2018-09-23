@@ -71,9 +71,7 @@ class MainPage(webapp2.RequestHandler):
         r = cursor.fetchone()
         # you get back a "Decimal" object from sql, need to convert to int in order to serialize to JSON
         dataFound = False
-        logging.info("r[0]  = ", r[0])
-        logging.info("r[1]  = ", r[1])
-        if (r is None) or (r[0] is None):
+        if (r is None) or (r[0] is None) or (r[1] is None):
             eligble = 0
             ballots = 0
             year = 2014
