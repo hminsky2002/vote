@@ -6,6 +6,8 @@ libraries:
 - name: MySQLdb
   version: "latest"
 
+default_expiration: "0d 1m"
+
 handlers:
 
 - url: /sql/(.*)
