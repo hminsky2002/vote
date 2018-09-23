@@ -122,7 +122,7 @@
 	 console.log("election data = ",electionData);
 	 var caption = "";
 
-	 if (electionData != null){
+	 if (electionData != null && electionData.data_found){
 	     
 	     //$("#caption").html("You entered a city of "+city + " registered = "+electionData.registered+ ", voted = "+electionData.voted);
 	     var ratio =  electionData.registered / electionData.voted;
