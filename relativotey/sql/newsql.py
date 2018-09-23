@@ -1,6 +1,6 @@
 # Copyright 2015, 2018 Google Inc. All Rights Reserved.
 #
-# Test opening a connection using sqlalchemy
+# Test code for opening a connection to db using sql_alchemy 
 
 import datetime
 import logging
