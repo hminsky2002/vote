@@ -53,6 +53,7 @@ class MainPage(webapp2.RequestHandler):
     def get(self):
         """Makes a SQL query to voter db, returns result as JSON"""
         self.response.headers['Content-Type'] = 'text/plain'
+        self.response.headers['Access-Control-Allow-Origin'] = "*"
 
         db = connect_to_cloudsql()
         cursor = db.cursor()
