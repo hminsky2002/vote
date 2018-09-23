@@ -85,3 +85,14 @@ brew uninstall --force mysql
 brew install mysql@5.7
 brew link --force mysql@5.7
 pip install mysql-python
+
+
+
+brew uninstall mysql
+brew install mysql-connector-c
+pip install mysql-python
+brew unlink mysql-connector-c
+brew install mysql
+
+
+gcloud app deploy --version=test

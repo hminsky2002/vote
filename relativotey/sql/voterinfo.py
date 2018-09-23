@@ -63,8 +63,8 @@ class MainPage(webapp2.RequestHandler):
         r = cursor.fetchone()
         # you get back a "Decimal" object from sql, need to convert to int in order to serialize to JSON
         dataFound = False
-        logging.info("r = "+r)
-        logging.info("r[0]  = "+ r[0])
+        logging.info("r[0]  = ", r[0])
+        logging.info("r[1]  = ", r[1])
         if (r is None) or (r[0] is None):
             vcount = 0
         else:
@@ -77,7 +77,7 @@ class MainPage(webapp2.RequestHandler):
                     "town": town,
                     "year": 2016 }
 
-        logging.info("results = "+results)
+        logging.info("results = ",results)
 
         self.response.write(json.dumps(results))
 
