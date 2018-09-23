@@ -21,6 +21,10 @@
 		 lookupStateFromInput();
 	     }
 	 });
+
+	 $("#state").change(function( event ) {
+	     lookupStateFromInput();
+	 });
      });
     </script>
 
@@ -139,7 +143,13 @@
 	     
 	     //$("#caption").html("You entered a state of "+state + " registered = "+electionData.registered+ ", voted = "+electionData.voted);
 	     var ratio =  electionData.registered / electionData.voted;
-	     $('#men').width(MAN_WIDTH * ratio);
+
+	     $( "#men" ).animate({
+		 width: MAN_WIDTH * ratio,
+	     }, 1000, function() {
+		 // Animation complete.
+	     });
+
 
 	     if (ratio >= 2) {
 		 caption = `If you had voted in the ${electionData.year} ${state} congressional election, your vote would have the weight of ${ratio.toPrecision(3)} eligible voters in a full turn-out election`;
