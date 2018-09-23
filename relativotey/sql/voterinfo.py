@@ -58,14 +58,14 @@ class MainPage(webapp2.RequestHandler):
         cursor = db.cursor()
         state = self.request.get('state')
         # python tuple syntax sux, that's why you need "(town,)" to make a single element tuple
-        cursor.execute('SELECT
+        cursor.execute("""SELECT
           Voting_Eligible_Population_VEP AS eligble,
           Total_Ballots_Counted AS ballots,
           Year
         FROM
           turnout
         WHERE
-          state = %s',(state,))
+          state = %s""",(state,))
 
         r = cursor.fetchone()
         # you get back a "Decimal" object from sql, need to convert to int in order to serialize to JSON
