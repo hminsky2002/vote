@@ -96,3 +96,21 @@ brew install mysql
 
 
 gcloud app deploy --version=test
+
+
+In order to make the 'naked domain' relativotey.org resolve properly, 
+  In App Engine -> Settings -> DNS
+    you need to "Disable Managed Security"
+
+
+www.relativotey.org	Google-managed, auto-renewing  -	CNAME	ghs.googlehosted.com	www
+
+relativotey.org	none	-	A 216.239.32.21
+				A 216.239.34.21
+				A 216.239.36.21
+				A 216.239.38.21
+				AAAA 2001:4860:4802:32::15
+				AAAA 2001:4860:4802:34::15
+				AAAA 2001:4860:4802:36::15
+				AAAA 2001:4860:4802:38::15
+
