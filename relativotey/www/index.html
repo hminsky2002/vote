@@ -34,17 +34,15 @@
     </script>
 
 
-</head>
-<body>
+    </head>
+    <body>
+	<div id="container" style="width:360px;height:750px;position:absolute;top:0;left:0">
+	    <img src="new-logo.png" alt="Relativotey"  width="360">
+	    <b>Pick Your State</b> or     <button id="locator" type="button"> <img src="locate-icon.png" width="16px" height="16px"/>Automatically Find My Location</button>
+	    <br>
+	    <br>
 
-<img src="new-logo.png" alt="Relativotey"  width="360">
-
-
-
-<h2>Enter State</h2>
-
-
-   <select id=state >
+	    <select id=state >
 	<option value="Alabama">Alabama</option>
 	<option value="Alaska">Alaska</option>
 	<option value="Arizona">Arizona</option>
@@ -99,17 +97,22 @@
     </select>
     <button id=lbutton>How Much Is My Vote Worth?!</button>
     <br>
-    <br>
-    <input id="locator" type="image" src="locate-icon.png" width="16px" height="16px"/> Automatically Find My Location
+
 
     <div id="locator-progress-bar" style="display:none">
 	<img src="progress-meter.gif" width="64" height="64">
     </div>
 
-<div height=350>
-    <div id="men" style="width:100px;height:220px; background:  url('men.png')"/>
- </div>
-<div id="caption"></div>
+    <div height=350>
+	<div id="men" style="width:100px;height:220px; background:  url('men.png')"/>
+    </div>
+    <div id="caption"></div>
+
+    <div id="map" style="width:360px;height:250px;position:absolute;top:35em;left:0;z-index:-1;opacity:0.7"></div>
+
+
+
+	</div>
 
 <!-- <div height=50>
     <div id="registered" style="width:100px;height:50px; background-color:red"/>
@@ -118,208 +121,210 @@
 -->
 
 
-<div id="map" style="width:360px;height:250px"></div>
+
     
 
 
-<script>
- var MAN_WIDTH=89
+	<script>
+	 var MAN_WIDTH=89
 
- // http://relativotey.org/code/voterinfo?town=Brookline  --> {...}
- 
- var electionData = null;
-
- function showVoterInfo(state) {
-     // Make this string safe to pass in URL
-     var encodedState = encodeURI(state);
-     var url = `/sql/voterinfo?state=${encodedState}`;
-     
-     $.getJSON(url, function(mydata) {
-	 console.log("got data from voterinfo: ", JSON.stringify(mydata));
-	 electionData = mydata;
-
-	 // Look up election data from 'database', we will make this an SQL query when we have a real db
-	 //var electionData = edb[state.toLowerCase()];
-
-	 console.log("election data = ",electionData);
-	 var caption = "";
-
-	 if (electionData != null && electionData.data_found){
-	     
-	     //$("#caption").html("You entered a state of "+state + " registered = "+electionData.registered+ ", voted = "+electionData.voted);
-	     var ratio =  electionData.registered / electionData.voted;
-
-	     $( "#men" ).animate({
-		 width: MAN_WIDTH * ratio,
-	     }, 1000, function() {
-		 // Animation complete.
-	     });
-
-
-	     if (ratio >= 2) {
-		 caption = `If you had voted in the ${electionData.year} ${state} congressional election, your vote would have the weight of ${ratio.toPrecision(3)} eligible voters in a full turn-out election`;
-	     } else {
-		 caption = `If you had voted in the ${electionData.year} ${state} congressional election, your vote would be worth ${ratio.toPrecision(3)*100}% of its original value in a full turn-out election`
-	     }
-	 } else {
-	     // No election data, either no state was entered or there's no data for it
-	     if (state == "") {
-		 caption = `Please enter a state name`;
-	     } else {
-		 caption = `Sorry we don't have complete election data on your state, ${state}, for any recent congressional election`;
-	     }
-	     
-	 }
-	 $("#caption").html(caption)
-
-     });
- }
-
- 
-
- var map, infoWindow;
-
- var pos, addr, geocoder;
-
-
- function initMap() {
-     map = new google.maps.Map(document.getElementById('map'), {
-	 center: {lat: 42.3459072, lng: -71.205471},
-	 zoom: 6
+	 // http://relativotey.org/code/voterinfo?town=Brookline  --> {...}
 	 
-     });
-     infoWindow = new google.maps.InfoWindow;
-     $("#lbutton").click(locate);
-     $("#locator").click(geolocate);
-     geocoder = new google.maps.Geocoder;
- }
+	 var electionData = null;
+
+	 function showVoterInfo(state) {
+	     // Make this string safe to pass in URL
+	     var encodedState = encodeURI(state);
+	     var url = `/sql/voterinfo?state=${encodedState}`;
+	     
+	     $.getJSON(url, function(mydata) {
+		 console.log("got data from voterinfo: ", JSON.stringify(mydata));
+		 electionData = mydata;
+
+		 // Look up election data from 'database', we will make this an SQL query when we have a real db
+		 //var electionData = edb[state.toLowerCase()];
+
+		 console.log("election data = ",electionData);
+		 var caption = "";
+
+		 if (electionData != null && electionData.data_found){
+		     
+		     //$("#caption").html("You entered a state of "+state + " registered = "+electionData.registered+ ", voted = "+electionData.voted);
+		     var ratio =  electionData.registered / electionData.voted;
+
+		     $( "#men" ).animate({
+			 width: MAN_WIDTH * ratio,
+		     }, 1000, function() {
+			 // Animation complete.
+		     });
 
 
- /**
-    Grab the STATE from input text field, and look up using geocoder, display on map
-  */
- function lookupStateFromInput() {
-     var state = $("#state").val();
-     console.log("user entered location "+state);
-     geocodeAddress(state,geocoder,map);
-     showVoterInfo(state);
- }
-
- /** Display city's location on map, using city name from input field */
- function locate() {
-     var state = $("#state").val();
-     if (state === undefined) {
-	 $("#caption").html("Please enter a state name");	
-     } else {
-	 lookupStateFromInput();
-
-
-     }
- }
-
- function getStateNameFromResults(results) {
-     var statename = null;
-
-     for (index in results) {
-	 var entry = results[index];
-	 var component = entry.address_components;
-	 for (index2 in component) {
-	     var addr = component[index2];
-	     console.log("checking addr = ", addr, addr.long_name, addr.types);
-	     var long_name = addr.long_name;
-	     var types = addr.types;
-	     if (types.includes("administrative_area_level_1")){
-		 statename = long_name;
-		 break;
-	     }
-	 }
-     }
-
-     return statename;
- }
-
-
- // Try to find user's location from their browser location API (probably uses IP address)
- function geolocate() {
-
-     $("#locator-progress-bar").show();
-
-     // Try HTML5 geolocation.
-     if (navigator.geolocation) {
-	 navigator.geolocation.getCurrentPosition(function(position) {
-	     pos = {
-		 lat: position.coords.latitude,
-		 lng: position.coords.longitude
-	     };
-
-	     infoWindow.setPosition(pos);
-
-	     // convert lat,lon to address
-	     geocoder.geocode({'location': pos}, function(results, status) {
-		 if (status === 'OK') {
-		     if (results[0]) {
-			 map.setZoom(6);
-			 var marker = new google.maps.Marker({
-			     position: pos,
-			     map: map
-			 });
-			 addr = results;
-			 //var geozip = a1.formatted_address.match(/,\s\w{2}\s(\d{5})/)[1];
-			 //console.log("geozip = "+geozip);
-			 //$("#zip").val(geozip);
-			 state = getStateNameFromResults(addr)
-			 $("#state").val(state);
-
-			 showVoterInfo(state);
-
-
-			 infoWindow.setContent(results[0].formatted_address);
-			 infoWindow.open(map, marker);
+		     if (ratio >= 2) {
+			 caption = `If you had voted in the ${electionData.year} ${state} congressional election, your vote would have the weight of ${ratio.toPrecision(3)} eligible voters in a full turn-out election`;
 		     } else {
-			 window.alert('No results found');
+			 caption = `If you had voted in the ${electionData.year} ${state} congressional election, your vote would be worth ${ratio.toPrecision(3)*100}% of its original value in a full turn-out election`
 		     }
 		 } else {
-		     window.alert('Geocoder failed due to: ' + status);
+		     // No election data, either no state was entered or there's no data for it
+		     if (state == "") {
+			 caption = `Please enter a state name`;
+		     } else {
+			 caption = `Sorry we don't have complete election data on your state, ${state}, for any recent congressional election`;
+		     }
+		     
 		 }
+		 $("#caption").html(caption)
 
-		 infoWindow.open(map);
-		 map.setCenter(pos);
-		 $("#locator-progress-bar").hide();
-	     }, function() {
-		 handleLocationError(true, infoWindow, map.getCenter());
 	     });
 	 }
-	 )} else {
-	     // Browser doesn't support Geolocation
-	     handleLocationError(false, infoWindow, map.getCenter());
-	     $("#locator-progress-bar").hide();
-	 }
- }
+
+	 
+
+	 var map, infoWindow;
+
+	 var pos, addr, geocoder;
 
 
- function geocodeAddress(address, geocoder, resultsMap) {
-     geocoder.geocode({'address': address}, function(results, status) {
-         if (status === 'OK') {
-	     addr = results;
-	     resultsMap.setCenter(results[0].geometry.location);
-	     var marker = new google.maps.Marker({
-		 map: resultsMap,
-		 position: results[0].geometry.location
+	 function initMap() {
+	     map = new google.maps.Map(document.getElementById('map'), {
+		 center: {lat: 42.3459072, lng: -71.205471},
+		 zoom: 6,
+		 disableDefaultUI: true
+		 
 	     });
-         } else {
-	     alert('Geocode was not successful for the following reason: ' + status);
-         }
-     });
- }
+	     infoWindow = new google.maps.InfoWindow;
+	     $("#lbutton").click(locate);
+	     $("#locator").click(geolocate);
+	     $("#locator2").click(geolocate);
+	     geocoder = new google.maps.Geocoder;
+	 }
 
- function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-     infoWindow.setPosition(pos);
-     infoWindow.setContent(browserHasGeolocation ?
-			   'Error: The Geolocation service failed.' :
-			   'Error: Your browser doesn\'t support geolocation.');
-     infoWindow.open(map);
- }
-</script>
+
+	 /**
+	    Grab the STATE from input text field, and look up using geocoder, display on map
+	  */
+	 function lookupStateFromInput() {
+	     var state = $("#state").val();
+	     console.log("user entered location "+state);
+	     geocodeAddress(state,geocoder,map);
+	     showVoterInfo(state);
+	 }
+
+	 /** Display city's location on map, using city name from input field */
+	 function locate() {
+	     var state = $("#state").val();
+	     if (state === undefined) {
+		 $("#caption").html("Please enter a state name");	
+	     } else {
+		 lookupStateFromInput();
+
+
+	     }
+	 }
+
+	 function getStateNameFromResults(results) {
+	     var statename = null;
+
+	     for (index in results) {
+		 var entry = results[index];
+		 var component = entry.address_components;
+		 for (index2 in component) {
+		     var addr = component[index2];
+		     console.log("checking addr = ", addr, addr.long_name, addr.types);
+		     var long_name = addr.long_name;
+		     var types = addr.types;
+		     if (types.includes("administrative_area_level_1")){
+			 statename = long_name;
+			 break;
+		     }
+		 }
+	     }
+
+	     return statename;
+	 }
+
+
+	 // Try to find user's location from their browser location API (probably uses IP address)
+	 function geolocate() {
+
+	     $("#locator-progress-bar").show();
+
+	     // Try HTML5 geolocation.
+	     if (navigator.geolocation) {
+		 navigator.geolocation.getCurrentPosition(function(position) {
+		     pos = {
+			 lat: position.coords.latitude,
+			 lng: position.coords.longitude
+		     };
+
+		     infoWindow.setPosition(pos);
+
+		     // convert lat,lon to address
+		     geocoder.geocode({'location': pos}, function(results, status) {
+			 if (status === 'OK') {
+			     if (results[0]) {
+				 map.setZoom(6);
+				 var marker = new google.maps.Marker({
+				     position: pos,
+				     map: map
+				 });
+				 addr = results;
+				 //var geozip = a1.formatted_address.match(/,\s\w{2}\s(\d{5})/)[1];
+				 //console.log("geozip = "+geozip);
+				 //$("#zip").val(geozip);
+				 state = getStateNameFromResults(addr)
+				 $("#state").val(state);
+
+				 showVoterInfo(state);
+
+
+				 infoWindow.setContent(results[0].formatted_address);
+				 infoWindow.open(map, marker);
+			     } else {
+				 window.alert('No results found');
+			     }
+			 } else {
+			     window.alert('Geocoder failed due to: ' + status);
+			 }
+
+			 infoWindow.open(map);
+			 map.setCenter(pos);
+			 $("#locator-progress-bar").hide();
+		     }, function() {
+			 handleLocationError(true, infoWindow, map.getCenter());
+		     });
+		 }
+		 )} else {
+		     // Browser doesn't support Geolocation
+		     handleLocationError(false, infoWindow, map.getCenter());
+		     $("#locator-progress-bar").hide();
+		 }
+	 }
+
+
+	 function geocodeAddress(address, geocoder, resultsMap) {
+	     geocoder.geocode({'address': address}, function(results, status) {
+		 if (status === 'OK') {
+		     addr = results;
+		     resultsMap.setCenter(results[0].geometry.location);
+		     var marker = new google.maps.Marker({
+			 map: resultsMap,
+			 position: results[0].geometry.location
+		     });
+		 } else {
+		     alert('Geocode was not successful for the following reason: ' + status);
+		 }
+	     });
+	 }
+
+	 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+	     infoWindow.setPosition(pos);
+	     infoWindow.setContent(browserHasGeolocation ?
+				   'Error: The Geolocation service failed.' :
+				   'Error: Your browser doesn\'t support geolocation.');
+	     infoWindow.open(map);
+	 }
+	</script>
 
 
 <script async defer
