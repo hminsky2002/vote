@@ -104,8 +104,10 @@
 		 }
 	     }
 	     
-	     el.innerHTML = zeroPad(district, 2);
-	     gFocusMap(state, district);
+	     districtCode = zeroPad(district, 2);
+
+	     el.innerHTML = districtCode;
+	     gFocusMap(state, districtCode);
 	     
 	 }
 
@@ -148,7 +150,8 @@
       <!-- INTERACTIVE MENU -->
       <div id='menu'>
 	  <div class="address">
-	      Address: <input type="text" id="userAddress" name="address"/>
+	      Address: <input type="text" id="userAddress" size="64" name="address"/>
+	  </div><br>
 	  <div class="selector">
 	      State:
 	      <select id='state'>
