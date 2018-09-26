@@ -32,6 +32,7 @@ for (d in possibleDistricts) {
 
 
 var gFocusMap;
+var gDistrict;
 
 $( document ).ready(
     function () {
@@ -220,21 +221,10 @@ $( document ).ready(
 		    if (features.length > 0) {
 			// The feature properties come from the original GeoJSON uploaded to Mapbox.
 			district = features[0].properties;
+			gDistrict = district;
+			console.log(`click handler, district = ${district}`);
 		    } 
 		    
-		    // Ok now we have the district either from the client-side query or the
-		    // API.
-		    if (district) {
-			// district.state now holds the two-letter USPS state abbreviation,
-			// and district.number now holds a zero-padded two-digit district
-			// number (00 for at-large districts). title_long and title_short
-			// have strings useful for display (e.g. "VA 8" and "Virginia’s 8th
-			// Congressional District", respectively).
-			alert("That's " + district.state + "-" + district.number + ", i.e." + district.title_long + ".");
-
-		    } else {
-			alert("You clicked on a location that is not within a U.S. congressional district.");
-		    }
 		});
 		
 	    });
