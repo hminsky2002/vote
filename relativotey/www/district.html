@@ -2,6 +2,8 @@
 <html>
     <head>
 	<meta charset='utf-8' />
+	<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
 	<title>Address To Congressional District Map</title>
 	<!-- jQuery -->
 	<script   src="https://code.jquery.com/jquery-1.12.2.min.js" integrity="sha256-lZFHibXzMHo3GGeehn1hudTAP3Sc0uKXBXAzHX1sjtk=" crossorigin="anonymous"></script>
@@ -19,112 +21,134 @@
 	<!-- GeoViewport -->
 	<script src='geoviewport.js'></script>
 
-   <style>
-
-     body { margin:0; padding:0; }
-     #map { position:absolute; top:0; bottom:0; width:100%; }
-
-     /* INTERACTIVE MENU */
-     #menu {
-         position:absolute;
-         top:10px;
-         left:10px;
-         background-color: white;
-         margin-right: 10px;
-         padding: 8px;
-         border-radius: 4px;
-         border: rgb(221, 221, 221);
-         box-shadow: 0px 0px 0px 2px rgb(221, 221, 221);
-         color: #222;
-         font-family: 'Open Sans', Arial, sans-serif;
-     }
-     .selector { display: inline-block; float: left; margin: 4px; }
-
-    </style>
-
-    <!-- Load in some useful data about the states -->
-    <script src='./states.js'></script>
-    <script src='./bboxes.js'></script>
-
-    <script>
-     var results;
+	<!-- Load in some useful data about the states -->
+	<script src='./states.js'></script>
+	<script src='./bboxes.js'></script>
+	<script src='./district-mapping.js'></script>
 
 
-     /**
-      * Build and execute request to look up voter info for provided address.
-      * @param {string} address Address for which to fetch voter info.
-      * @param {function(Object)} callback Function which takes the
-      *     response object as a parameter.
-      */
-     function lookup(address, callback) {
+	<style>
+
+	    body { margin:0; padding:0; }
+	    #map { position:absolute; top:0; bottom:0; width:100%; }
+
+	    /* INTERACTIVE MENU */
+	    #menu {
+            position:absolute;
+            top:10px;
+            left:10px;
+            background-color: white;
+            margin-right: 10px;
+            padding: 8px;
+            border-radius: 4px;
+            border: rgb(221, 221, 221);
+            box-shadow: 0px 0px 0px 2px rgb(221, 221, 221);
+            color: #222;
+            font-family: 'Open Sans', Arial, sans-serif;
+	    }
+	    .selector { display: inline-block; float: left; margin: 4px; }
+
+	</style>
+
+	<script>
+	 var results;
 	 /**
-          * Election ID for which to fetch voter info.
-          * @type {number}
-          */
-         var electionId = 2000;
+	  * Build and execute request to look up voter info for provided address.
+	  * @param {string} address Address for which to fetch voter info.
+	  * @param {function(Object)} callback Function which takes the
+	  *     response object as a parameter.
+	  */
+	 function addressToDistrictInfo(address, callback) {
+	     /**
+	      * Election ID for which to fetch voter info.
+	      * @type {number}
+	      */
+	     var electionId = 2000;
+	     
+	     /**
+	      * Request object for given parameters.
+	      * @type {gapi.client.HttpRequest}
+	      */
+	     var req = gapi.client.request({
+		 
+		 
+		 'path' : '/civicinfo/v2/representatives',
+		 'params' : {'address': address}
+	     });
+	     req.execute(callback);
+	 }
 	 
-         /**
-          * Request object for given parameters.
-          * @type {gapi.client.HttpRequest}
-          */
-         var req = gapi.client.request({
-
-
-             'path' : '/civicinfo/v2/representatives',
-             'params' : {'address': address}
-         });
-	 req.execute(callback);
-     }
-
-     /**
-      * Render results in the DOM.
-      * @param {Object} response Response object returned by the API.
-      * @param {Object} rawResponse Raw response from the API.
-      */
-     function renderResults(response, rawResponse) {
-         var el = document.getElementById('results');
-         if (!response || response.error) {
-             el.appendChild(document.createTextNode(
-		 'Error while trying to fetch polling place'));
-             return;
-         }
-	 console.log(response);
-	 console.log(rawResponse);
-	 
-	 results = response;
-	 var district = null;
-	 for (var key in response.divisions) {
-	     var data = response[key];
-	     m = key.match(/\/cd:(\d+)$/);
-	     if (m != null) {
-		 district = m[1];
-		 break;
+	 /**
+	  * Render results in the DOM.
+	  * @param {Object} response Response object returned by the API.
+	  * @param {Object} rawResponse Raw response from the API.
+	  */
+	 function renderResults(response, rawResponse) {
+	     var el = document.getElementById('results');
+	     if (!response || response.error) {
+		 el.appendChild(document.createTextNode(
+		     'Error while trying to fetch polling place'));
+		 return;
 	     }
+	     results = response;
+
+	     var state = results.normalizedInput.state;
+	     console.log('/civicinfo/v2/representatives lookup,  state=', state);
+	     var district = null;
+	     for (var key in response.divisions) {
+		 var data = response[key];
+		 m = key.match(/\/cd:(\d+)$/);
+		 if (m != null) {
+		     district = m[1];
+		     break;
+		 }
+	     }
+	     
+	     el.innerHTML = zeroPad(district, 2);
+	     gFocusMap(state, district);
+	     
 	 }
 
-	 el.innerHTML = district;
-     }
-     
+	 function zeroPad(num, places) {
+	     var zero = places - num.toString().length + 1;
+	     return Array(+(zero > 0 && zero)).join("0") + num;
+	 }
 
+	 
+	 
+	 /**
+	  * Initialize the API client and make a request.
+	  */
+	 function googleAPICallback() {
+	     gapi.client.setApiKey('AIzaSyCzPmoqSuBu_wgzwuRauq0V0LQYtY919Ik');
+	 }
 
-     /**
-      * Initialize the API client and make a request.
-      */
-     function load() {
-         gapi.client.setApiKey('AIzaSyCzPmoqSuBu_wgzwuRauq0V0LQYtY919Ik');
-         lookup('67 Clyde st, Newton MA', renderResults);
-     }
-    </script>
+	 $(document).ready(function(){
+	     $("#userAddress").keypress(function( event ) {
+		 if ( event.which == 13 ) {
+		     addressToDistrictInfo($('#userAddress').val(), renderResults);
 
-    <script src='./district-mapping.js'></script>
+		 }
+	     });
 
-    <script src="https://apis.google.com/js/client.js?onload=load"></script>
+	 });
+
+	 
+	 
+	</script>
+
+    <script src="https://apis.google.com/js/client.js?onload=googleAPICallback"></script>
   </head>
   <body>
       <div id="results"></div>
 
-      <!-- INTERACTIVE STATES AND DISTRICTS MENU -->
+      <!-- Map Container -->
+      <div id='map'></div>
+
+      <!-- INTERACTIVE MENU -->
       <div id='menu'>
+	  <div class="address">
+	      Address: <input type="text" id="userAddress" name="address"/>
 	  <div class="selector">
 	      State:
 	      <select id='state'>
@@ -139,7 +163,6 @@
 	  </div>
       </div>
 
-    <div id='map'></div>
 
   </body>
 </html>
