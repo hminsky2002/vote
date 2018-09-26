@@ -1,21 +1,25 @@
 <!doctype html>
 <html>
     <head>
+	<meta charset='utf-8' />
+	<title>Address To Congressional District Map</title>
 	<!-- jQuery -->
 	<script   src="https://code.jquery.com/jquery-1.12.2.min.js" integrity="sha256-lZFHibXzMHo3GGeehn1hudTAP3Sc0uKXBXAzHX1sjtk=" crossorigin="anonymous"></script>
 
+	
+	<!-- Mabpox GL -->
+	<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.js'></script>
+	<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.css' rel='stylesheet' />
 
-    <!-- Mabpox GL -->
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.17.0/mapbox-gl.js'></script>
-    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.17.0/mapbox-gl.css' rel='stylesheet'>
 
-    <!-- Mapbox.js (fallback) -->
-    <script src='https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.js'></script>
-    <link href='https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.css' rel='stylesheet' />
+	<!-- Mapbox.js (fallback) -->
+	<script src='https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.js'></script>
+	<link href='https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.css' rel='stylesheet' />
 
-    <!-- GeoViewport -->
-    <script src='geoviewport.js'></script>
-    <style>
+	<!-- GeoViewport -->
+	<script src='geoviewport.js'></script>
+
+   <style>
 
      body { margin:0; padding:0; }
      #map { position:absolute; top:0; bottom:0; width:100%; }
@@ -41,7 +45,6 @@
     <!-- Load in some useful data about the states -->
     <script src='./states.js'></script>
     <script src='./bboxes.js'></script>
-    <script src='./district-map.js'></script>
 
     <script>
      var results;
@@ -112,6 +115,9 @@
          lookup('67 Clyde st, Newton MA', renderResults);
      }
     </script>
+
+    <script src='./district-mapping.js'></script>
+
     <script src="https://apis.google.com/js/client.js?onload=load"></script>
   </head>
   <body>
