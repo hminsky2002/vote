@@ -54,6 +54,9 @@ $( document ).ready(
 		window.location.hash = newHash;
 	    }
 	});
+
+	// set default menu selection to Massachusetts
+	$("#state").val("MA");
 	
 	//** INTERACTIVE MENU
 	// Create an event listener that responds to the selection of a district from the menu
@@ -85,7 +88,7 @@ $( document ).ready(
 		var baseStyle = map.getStyle()
 		
 		// Add zoom and rotation controls to the map
-		map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+		map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 		
 		// Disable using touch gestures for map rotation
 		map.touchZoomRotate.disableRotation();

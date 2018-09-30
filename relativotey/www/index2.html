@@ -105,26 +105,57 @@
 
 
     <script>
+
      var MAN_WIDTH=89
 
+     var map;
+     var pos, addr, geocoder;
 
-     // returns "city, state"
-     function getAddressWithState() {
-	 var city = $('#userAddress').val();
-	 var state = $("#state").val();
-	 return `${city}, ${state}`;
+
+     // Look up state by full name name, return its abbreviation
+     function stateNameToAbbrev(name) {
+	 var abbrev = stateList.flatMap(function(d) { return (d.name.toLowerCase() == name.toLowerCase()) ? [d.abbr] : [];})
+	 if (abbrev.length == 1) {
+	     return abbrev[0];
+	 } else {
+	     return null;
+	 }
+     }
+
+     // Takes state abbrev, returns full name
+     function abbrevToStateName(name) {
+	 var fullname = stateList.flatMap(function(d) { return (d.abbr.toLowerCase() == name.toLowerCase()) ? [d.name] : [];})
+	 if (fullname.length == 1) {
+	     return fullname[0];
+	 } else {
+	     return null;
+	 }
      }
 
 
+     // returns "city, state-abbrev", e.g., "Brookline, MA"
+     function getAddressWithState() {
+	 var city = $('#userAddress').val();
+	 var state = $("#state").val();
+	 if (city == "") {
+	     return abbrevToStateName(state);
+	 } else {
+	     return  [city, abbrevToStateName(state)].join(",");
+	 }
+     }
 
      // http://relativotey.org/code/voterinfo?town=Brookline  --> {...}
      
      var electionData = null;
 
-     function showVoterInfo(state) {
+     // Takes a state abbreviated name (e.g., "MA")
+     // Looks up voter stats with our 'voterinfo' endpoint, and displays using 'little man' bar graph
+     function showVoterInfo(stateAbbrev) {
 	 // Make this string safe to pass in URL
-	 var encodedState = encodeURI(state);
+	 var encodedState = encodeURI(abbrevToStateName(stateAbbrev));
 	 var url = `/sql/voterinfo?state=${encodedState}`;
+
+	 var state = abbrevToStateName(stateAbbrev);
 	 
 	 $.getJSON(url, function(mydata) {
 	     console.log("got data from voterinfo: ", JSON.stringify(mydata));
@@ -167,41 +198,25 @@
 	 });
      }
 
-     
-
-     var map;
-
-     var pos, addr, geocoder;
-
-
      function initMap() {
-	 /*
-	    map = new google.maps.Map(document.getElementById('map'), {
-	    center: {lat: 42.3459072, lng: -71.205471},
-	    zoom: 6,
-	    disableDefaultUI: true
-	    
-	    });
-	  */
-	 $("#lbutton").click(function() {
-	     var addr = getAddressWithState();
-	     addressToDistrictInfo(addr, renderResults);
-	 });
-
-	 $("#locator").click(geolocate);
 	 geocoder = new google.maps.Geocoder;
+	 $("#lbutton").click(lookupStateFromInput);
+	 $("#locator").click(geolocate);
      }
-
 
      /**
 	Grab the STATE from input text field, and look up using geocoder, display on map
       */
      function lookupStateFromInput() {
+	 $("#locator-progress-bar").show();
 	 var state = $("#state").val();
 	 console.log("user entered location "+state);
-	 geocodeAddress(state,geocoder,map);
+
+	 // This call used to be for display of location on Google Maps map API
+	 // geocodeAddress(state,geocoder,map);
+
+	 addressToDistrictInfo(getAddressWithState(), showDistrictOnMap);
 	 showVoterInfo(state);
-	 addressToDistrictInfo(getAddressWithState(), renderResults);
      }
 
      /** Display city's location on map, using city name from input field */
@@ -211,11 +226,10 @@
 	     $("#caption").html("Please enter a state name");	
 	 } else {
 	     lookupStateFromInput();
-
-
 	 }
      }
 
+     // Parses out the results from a Google geolocation call, to get the (full) state name
      function getStateNameFromResults(results) {
 	 var statename = null;
 
@@ -233,7 +247,6 @@
 		 }
 	     }
 	 }
-
 	 return statename;
      }
 
@@ -267,11 +280,13 @@
 			     //var geozip = a1.formatted_address.match(/,\s\w{2}\s(\d{5})/)[1];
 			     //console.log("geozip = "+geozip);
 			     //$("#zip").val(geozip);
-			     state = getStateNameFromResults(addr)
-			     $("#state").val(state);
-
-			     showVoterInfo(state);
-
+			     fullStateName = getStateNameFromResults(addr)
+			     stateAbbrev = stateNameToAbbrev(fullStateName);
+			     console.log("geolocate: state=",fullStateName);
+			     $("#state").val(stateAbbrev);
+			     
+			     addressToDistrictInfo(getAddressWithState(), showDistrictOnMap);
+			     showVoterInfo(stateAbbrev);
 
 			     //infoWindow.setContent(results[0].formatted_address);
 			     //infoWindow.open(map, marker);
@@ -285,6 +300,7 @@
 		     //map.setCenter(pos);
 		     $("#locator-progress-bar").hide();
 		 }, function() {
+		     $("#locator-progress-bar").hide();
 		     handleLocationError(true, map.getCenter());
 		 });
 	     }
@@ -335,6 +351,8 @@
 	  * Request object for given parameters.
 	  * @type {gapi.client.HttpRequest}
 	  */
+	 console.log(`addressToDistrictInfo address=${address}`);
+
 	 var req = gapi.client.request({
 	     
 	     
@@ -346,11 +364,11 @@
      
 
      /**
-      * Render results in the DOM.
-      * @param {Object} response Response object returned by the API.
-      * @param {Object} rawResponse Raw response from the API.
+	Used as the callback from Google civics API
+
+	Result of looking up an address yields voting district and state
       */
-     function renderResults(response, rawResponse) {
+     function showDistrictOnMap(response, rawResponse) {
 	 var el = document.getElementById('results');
 	 if (!response || response.error) {
 	     el.appendChild(document.createTextNode(
@@ -360,6 +378,7 @@
 	 results = response;
 
 	 var state = results.normalizedInput.state;
+	 console.log(results);
 	 console.log('/civicinfo/v2/representatives lookup,  state=', state);
 	 var district = null;
 	 for (var key in response.divisions) {
@@ -370,10 +389,13 @@
 		 break;
 	     }
 	 }
-	 
-	 districtCode = zeroPad(district, 2);
+	 var districtCode = null;
+	 if (district != "" && district != null) {
+	     districtCode = zeroPad(district, 2);
+	 }
+	 console.log(`district=${district}, districtCode=${districtCode}`);
 
-	 //el.innerHTML = districtCode;
+	 // Shows MapBox district boundary map for this state/district
 	 gFocusMap(state, districtCode);
 	 
      }
@@ -403,87 +425,37 @@
     <script async defer src="https://apis.google.com/js/client.js?onload=googleAPICallback"></script>
     <body>
 
-            
+
 	<div id="container" style="height:750px;position:absolute;top:0;left:0;z-index:10">
-	
-	<img src="new-logo.png" alt="Relativotey"  width="360">
-	<br>
-	<b>Pick Your State</b> or
-	<button id="locator" type="button"><img src="locate-icon.png" width="16px" height="16px"/>Automatically Find My Location</button>
-	<br>
-	Address: <input type="text" id="userAddress" size="32" name="address"/>
-	<select id=state >
-	    <option value="Alabama">Alabama</option>
-	    <option value="Alaska">Alaska</option>
-	    <option value="Arizona">Arizona</option>
-	    <option value="Arkansas">Arkansas</option>
-	    <option value="California">California</option>
-	    <option value="Colorado">Colorado</option>
-	    <option value="Connecticut">Connecticut</option>
-	    <option value="Delaware">Delaware</option>
-	    <option value="District Of Columbia">District Of Columbia</option>
-	    <option value="Florida">Florida</option>
-	    <option value="Georgia">Georgia</option>
-	    <option value="Hawaii">Hawaii</option>
-	    <option value="Idaho">Idaho</option>
-	    <option value="Illinois">Illinois</option>
-	    <option value="Indiana">Indiana</option>
-	    <option value="Iowa">Iowa</option>
-	    <option value="Kansas">Kansas</option>
-	    <option value="Kentucky">Kentucky</option>
-	    <option value="Louisiana">Louisiana</option>
-	    <option value="Maine">Maine</option>
-	    <option value="Maryland">Maryland</option>
-	    <option value="Massachusetts" selected="selected">Massachusetts</option>
-	    <option value="Michigan">Michigan</option>
-	    <option value="Minnesota">Minnesota</option>
-	    <option value="Mississippi">Mississippi</option>
-	    <option value="Missouri">Missouri</option>
-	    <option value="Montana">Montana</option>
-	    <option value="Nebraska">Nebraska</option>
-	    <option value="Nevada">Nevada</option>
-	    <option value="New Hampshire">New Hampshire</option>
-	    <option value="New Jersey">New Jersey</option>
-	    <option value="New Mexico">New Mexico</option>
-	    <option value="New York">New York</option>
-	    <option value="North Carolina">North Carolina</option>
-	    <option value="North Dakota">North Dakota</option>
-	    <option value="Ohio">Ohio</option>
-	    <option value="Oklahoma">Oklahoma</option>
-	    <option value="Oregon">Oregon</option>
-	    <option value="Pennsylvania">Pennsylvania</option>
-	    <option value="Rhode Island">Rhode Island</option>
-	    <option value="South Carolina">South Carolina</option>
-	    <option value="South Dakota">South Dakota</option>
-	    <option value="Tennessee">Tennessee</option>
-	    <option value="Texas">Texas</option>
-	    <option value="Utah">Utah</option>
-	    <option value="Vermont">Vermont</option>
-	    <option value="Virginia">Virginia</option>
-	    <option value="Washington">Washington</option>
-	    <option value="West Virginia">West Virginia</option>
-	    <option value="Wisconsin">Wisconsin</option>
-	    <option value="Wyoming">Wyoming</option>
-	</select>
-	<button id=lbutton>How Much Is My Vote Worth?!</button>
-	<br>
-      
-	<!-- <div id="results"></div> -->
-      
-	<div id="locator-progress-bar" style="display:none">
-	    <img src="progress-meter.gif" width="64" height="64">
-	</div>
-      
-	<div height=350>
+	    
+	    <img src="new-logo.png" alt="Relativotey"  width="360">
+	    <br>
+	    <b>Pick Your State</b> or
+	    <button id="locator" type="button"><img src="locate-icon.png" width="16px" height="16px"/>Automatically Find My Location</button>
+	    <br>
+	    <br>
+	    Address: <input type="text" id="userAddress" size="32" name="address"/>
+	    <!-- - states menu magically filled in by district-mappings.js  -->
+	    <select id=state ></select>
+	    <button id=lbutton>How Much Is My Vote Worth?!</button>
+	    <br>
+	    <br>
+
+	    <!-- <div id="results"></div> -->
+	    
+	    <div id="locator-progress-bar" style="display:none">
+		<img src="progress-meter.gif" width="64" height="64">
+	    </div>
+	    
+
 	    <div id="men" style="width:100px;height:220px; background:  url('men-transparent.png')"/>
+	    <div id="caption" style="position:absolute;top:460px;background-color:white"></div>
+
+	    
 	</div>
-	<div id="caption"></div>
-	
-	<!-- Map Container -->
-	
-	</div>
-	<div id="results"></div>
-	<div id='map' style="height:700px;position:absolute;top:17em;left:0;z-index:-1;opacity:0.7"></div>
+
+	<div id='map' style="height:500px;position:absolute;top:17em;left:0;z-index:-1;opacity:0.7"></div>
+
 
 
 
