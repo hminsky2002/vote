@@ -113,26 +113,27 @@
 
 
      // Look up state by full name name, return its abbreviation
-     function stateNameToAbbrev(name) {
-	 var abbrev = stateList.flatMap(function(d) { return (d.name.toLowerCase() == name.toLowerCase()) ? [d.abbr] : [];})
-	 if (abbrev.length == 1) {
-	     return abbrev[0];
-	 } else {
-	     return null;
-	 }
+     function stateNameToAbbrev(statename) {
+	 var abbrev = null;
+	 stateList.forEach(function (d) { 
+	     if (d.name.toLowerCase() == statename.toLowerCase()) {
+		 abbrev = d.abbr;
+	     }
+	 });
+	 return abbrev;
      }
 
      // Takes state abbrev, returns full name
-     function abbrevToStateName(name) {
-	 var fullname = stateList.flatMap(function(d) { return (d.abbr.toLowerCase() == name.toLowerCase()) ? [d.name] : [];})
-	 if (fullname.length == 1) {
-	     return fullname[0];
-	 } else {
-	     return null;
-	 }
+     function abbrevToStateName(abbrev) {
+	 var fullname = null;
+	 stateList.forEach(function (d) { 
+	     if (d.abbr.toLowerCase() == abbrev.toLowerCase()) {
+		 fullname = d.name;
+	     }
+	 });
+	 return fullname;
      }
-
-
+     
      // returns "city, state-abbrev", e.g., "Brookline, MA"
      function getAddressWithState() {
 	 var city = $('#userAddress').val();
@@ -151,6 +152,8 @@
      // Takes a state abbreviated name (e.g., "MA")
      // Looks up voter stats with our 'voterinfo' endpoint, and displays using 'little man' bar graph
      function showVoterInfo(stateAbbrev) {
+	 $("#locator-progress-bar").show();
+
 	 // Make this string safe to pass in URL
 	 var encodedState = encodeURI(abbrevToStateName(stateAbbrev));
 	 var url = `/sql/voterinfo?state=${encodedState}`;
@@ -160,6 +163,8 @@
 	 $.getJSON(url, function(mydata) {
 	     console.log("got data from voterinfo: ", JSON.stringify(mydata));
 	     electionData = mydata;
+
+	     $("#locator-progress-bar").hide();
 
 	     // Look up election data from 'database', we will make this an SQL query when we have a real db
 	     //var electionData = edb[state.toLowerCase()];
@@ -449,7 +454,7 @@
 	    
 
 	    <div id="men" style="width:100px;height:220px; background:  url('men-transparent.png')"/>
-	    <div id="caption" style="position:absolute;top:460px;background-color:white"></div>
+	    <div id="caption" style="position:absolute;top:480px;background-color:white"></div>
 
 	    
 	</div>
