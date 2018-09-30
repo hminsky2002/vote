@@ -169,7 +169,7 @@
 
      
 
-     var map, infoWindow;
+     var map;
 
      var pos, addr, geocoder;
 
@@ -282,11 +282,10 @@
 			 window.alert('Geocoder failed due to: ' + status);
 		     }
 
-		     infoWindow.open(map);
 		     //map.setCenter(pos);
 		     $("#locator-progress-bar").hide();
 		 }, function() {
-		     handleLocationError(true, infoWindow, map.getCenter());
+		     handleLocationError(true, map.getCenter());
 		 });
 	     }
 	     )} else {
@@ -313,12 +312,8 @@
 	 });
      }
 
-     function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-	 infoWindow.setPosition(pos);
-	 infoWindow.setContent(browserHasGeolocation ?
-			       'Error: The Geolocation service failed.' :
-			       'Error: Your browser doesn\'t support geolocation.');
-	 infoWindow.open(map);
+     function handleLocationError(browserHasGeolocation, pos) {
+	 console.log("geo location error", pos);
      }
 
 
