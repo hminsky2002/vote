@@ -97,56 +97,58 @@ $( document ).ready(
 		    // Set the interactive menu to focus on the state and district code, if provided
 		    $('#state').val(stateAbbr);
 		    $('#district').empty();
-		    possibleDistricts[stateAbbr].map(function(d) {
-			$('#district')
-			    .append($("<option></option>")
-				    .attr('value', d).text(d));
-		    });
-		    if (districtCode) $('#district').val(districtCode);
-		    
-		    // For each district color layer in the map, apply some filters...
-		    for (var i = 1; i <= 5; i++) {
+		    if (possibleDistricts[stateAbbr]) {
+			possibleDistricts[stateAbbr].map(function(d) {
+			    $('#district')
+				.append($("<option></option>")
+					.attr('value', d).text(d));
+			});
+			if (districtCode) $('#district').val(districtCode);
 			
-			// The filter that filters based on color is the one we want to preserve
-			// If there are already multiple filters applied, it will be the last one
-			var exisitingFilter = map.getFilter('districts_' + i);
-			if (exisitingFilter[0] === 'all') {
-			    exisitingFilter = exisitingFilter[exisitingFilter.length - 1];
+			// For each district color layer in the map, apply some filters...
+			for (var i = 1; i <= 5; i++) {
+			    
+			    // The filter that filters based on color is the one we want to preserve
+			    // If there are already multiple filters applied, it will be the last one
+			    var exisitingFilter = map.getFilter('districts_' + i);
+			    if (exisitingFilter[0] === 'all') {
+				exisitingFilter = exisitingFilter[exisitingFilter.length - 1];
+			    }
+			    
+			    // Create a fresh filter to be applied
+			    var filter = ['all'];
+			    
+			    // Add filters for the focus state and district number
+			    if (stateAbbr) filter.push(['==', 'state', stateAbbr]);
+			    if (districtCode) filter.push(['==', 'number', districtCode]);
+			    
+			    // Add the existing color filter
+			    var layerFilter = filter.concat([exisitingFilter]);
+			    
+			    // Set new layer filter for each district layer in the map
+			    map.setFilter('districts_' + i, layerFilter);
+			    map.setFilter('districts_' + i + '_boundary', layerFilter);
+			    map.setFilter('districts_' + i + '_label', layerFilter);
+			    
 			}
 			
-			// Create a fresh filter to be applied
-			var filter = ['all'];
+			// Create a generic filter for the focus state and district number that does not include color filtering
+			var boundaryFilter = ['all'];
+			if (stateAbbr) boundaryFilter.push(['==', 'state', stateAbbr]);
+			if (districtCode) boundaryFilter.push(['==', 'number', districtCode]);
 			
-			// Add filters for the focus state and district number
-			if (stateAbbr) filter.push(['==', 'state', stateAbbr]);
-			if (districtCode) filter.push(['==', 'number', districtCode]);
+			// Apply the generic filter to the boundary lines
+			map.setFilter('districts_boundary_line', boundaryFilter);
 			
-			// Add the existing color filter
-			var layerFilter = filter.concat([exisitingFilter]);
+			// Determine current window height and width and whether the bbox should focus on a single district
+			var height = window.innerHeight,
+			    width = window.innerWidth,
+			    districtAbbr = districtCode ? districtCode : '';
 			
-			// Set new layer filter for each district layer in the map
-			map.setFilter('districts_' + i, layerFilter);
-			map.setFilter('districts_' + i + '_boundary', layerFilter);
-			map.setFilter('districts_' + i + '_label', layerFilter);
-			
+			// Determine the best center and zoom level for the new map focus and then go there
+			var view = geoViewport.viewport(bboxes[stateAbbr + districtAbbr], [width/2, height/2]);
+			map.jumpTo(view);
 		    }
-		    
-		    // Create a generic filter for the focus state and district number that does not include color filtering
-		    var boundaryFilter = ['all'];
-		    if (stateAbbr) boundaryFilter.push(['==', 'state', stateAbbr]);
-		    if (districtCode) boundaryFilter.push(['==', 'number', districtCode]);
-		    
-		    // Apply the generic filter to the boundary lines
-		    map.setFilter('districts_boundary_line', boundaryFilter);
-		    
-		    // Determine current window height and width and whether the bbox should focus on a single district
-		    var height = window.innerHeight,
-			width = window.innerWidth,
-			districtAbbr = districtCode ? districtCode : '';
-		    
-		    // Determine the best center and zoom level for the new map focus and then go there
-		    var view = geoViewport.viewport(bboxes[stateAbbr + districtAbbr], [width/2, height/2]);
-		    map.jumpTo(view);
 		}
 
 		console.log('setting gFocusMap to ', focusMap);
