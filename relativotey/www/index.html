@@ -430,6 +430,7 @@
     <script async defer src="https://apis.google.com/js/client.js?onload=googleAPICallback"></script>
     <body>
 
+	<div id='map' style="height:500px;position:absolute;top:17em;left:0;z-index:-1;opacity:0.7"></div>
 
 	<div id="container" style="height:750px;position:absolute;top:0;left:0;z-index:10">
 	    
@@ -440,7 +441,7 @@
 	    <table border="0">
 		<tr>
 		    <td style="padding: 5px 10px 5px 10px;text-align:right">STATE</td>
-		    <td><select id=state placeholder="Pick A State" /></td>
+		    <td><select id="state"><option></option></select></td>
 		</tr>
 		<tr>
 		    <td style="padding: 5px 10px 5px 10px;text-align:right">CITY</td>
@@ -450,13 +451,13 @@
 		    <td></td>
 		    <td><button id=lbutton>How Much Is My Vote Worth?!</button></td>
 		</tr>
-		    </table>
-		    <br>
-		    <br>
+	    </table>
+	    <br>
+	    <br>
 
 	    <!-- <div id="results"></div> -->
 	    
-	    <div id="locator-progress-bar" style="display:none">
+	    <div align="center" id="locator-progress-bar" style="display:none">
 		<img src="progress-meter.gif" width="64" height="64">
 	    </div>
 	    
@@ -467,7 +468,7 @@
 	    
 	</div>
 
-	<div id='map' style="height:500px;position:absolute;top:17em;left:0;z-index:-1;opacity:0.7"></div>
+
 
 
 
