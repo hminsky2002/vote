@@ -185,9 +185,9 @@
 
 
 		 if (ratio >= 2) {
-		     caption = `If you had voted in the ${electionData.year} ${state} congressional election, your vote would have the weight of ${ratio.toPrecision(3)} eligible voters in a full turn-out election`;
+		     caption = `If you had voted in the ${electionData.year} ${state} congressional election, your vote would have the weight of <b><i>${ratio.toPrecision(3)}</i></b> eligible voters in a full turn-out election`;
 		 } else {
-		     caption = `If you had voted in the ${electionData.year} ${state} congressional election, your vote would be worth ${ratio.toPrecision(3)*100}% of its original value in a full turn-out election`
+		     caption = `If you had voted in the ${electionData.year} ${state} congressional election, your vote would be worth <b><i>${ratio.toPrecision(3)*100}%</i></b> of its original value in a full turn-out election`
 		 }
 	     } else {
 		 // No election data, either no state was entered or there's no data for it
