@@ -435,16 +435,24 @@
 	    
 	    <img src="logo-trans.png" alt="Relativotey"  width="360">
 	    <br>
-	    <b>Pick Your State</b> or
-	    <button id="locator" type="button"><img src="locate-icon.png" width="16px" height="16px"/>Automatically Find My Location</button>
-	    <br>
-	    <br>
-	    City or Town: <input type="text" id="userAddress" size="32" name="address"/>
-	    <!-- - states menu magically filled in by district-mappings.js  -->
-	    <select id=state ></select>
-	    <button id=lbutton>How Much Is My Vote Worth?!</button>
-	    <br>
-	    <br>
+	    <button id="locator" type="button"><img src="locate-icon.png" width="16px" height="16px"/>Automatically Find My Location</button> or choose
+
+	    <table border="0">
+		<tr>
+		    <td style="padding: 5px 10px 5px 10px;text-align:right">STATE</td>
+		    <td><select id=state placeholder="Pick A State" /></td>
+		</tr>
+		<tr>
+		    <td style="padding: 5px 10px 5px 10px;text-align:right">CITY</td>
+		    <td align="left"><input type="text" id="userAddress" size="20" name="address" placeholder="Optional" /></td>
+		</tr>
+		<tr>
+		    <td></td>
+		    <td><button id=lbutton>How Much Is My Vote Worth?!</button></td>
+		</tr>
+		    </table>
+		    <br>
+		    <br>
 
 	    <!-- <div id="results"></div> -->
 	    
@@ -454,7 +462,7 @@
 	    
 
 	    <div id="men" style="opacity:0.7;width:100px;height:220px; background:  url('men-transparent.png')"/>
-	    <div id="caption" style="position:absolute;top:500px;background-color:white"></div>
+	    <div id="caption" style="position:absolute;top:500px;background-color:#eeeeee"></div>
 
 	    
 	</div>
