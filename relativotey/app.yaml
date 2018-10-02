@@ -33,7 +33,7 @@ beta_settings:
 
 # [START gae_python_mysql_env]
 env_variables:
-    CLOUDSQL_CONNECTION_NAME: votedb-216400:us-central1:votedb-a
+    CLOUDSQL_CONNECTION_NAME: votedb-216400:us-central1:voter-db-micro 
     CLOUDSQL_USER: root
     CLOUDSQL_PASSWORD: theusual
 
