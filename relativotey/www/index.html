@@ -289,7 +289,11 @@
 			     stateAbbrev = stateNameToAbbrev(fullStateName);
 			     console.log("geolocate: state=",fullStateName);
 			     $("#state").val(stateAbbrev);
-			     
+
+			     // grab full street level address, can be used to find congressional district
+			     var streetAddr = results[0].formatted_address;
+			     $("#userAddress").val(streetAddr);
+
 			     addressToDistrictInfo(getAddressWithState(), showDistrictOnMap);
 			     showVoterInfo(stateAbbrev);
 
@@ -409,14 +413,14 @@
      function zeroPad(num, places) {
 	 var zero = places - num.toString().length + 1;
 	 return Array(+(zero > 0 && zero)).join("0") + num;
-     }
+			 }
 
-     /**
-      * Initialize the API client and make a request.
-      */
-     function googleAPICallback() {
-	 gapi.client.setApiKey('AIzaSyCzPmoqSuBu_wgzwuRauq0V0LQYtY919Ik');
-     }
+			 /**
+			  * Initialize the API client and make a request.
+			  */
+			 function googleAPICallback() {
+			     gapi.client.setApiKey('AIzaSyCzPmoqSuBu_wgzwuRauq0V0LQYtY919Ik');
+			 }
 
 
 
