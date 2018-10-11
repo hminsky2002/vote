@@ -1,4 +1,6 @@
 $(document).ready(function(){
+    $("#display-data").hide();
+    $("#load-data-auto").show();
     $("#state").keypress(function( event ) {
         if ( event.which == 13 ) {
             lookupStateFromInput();
@@ -21,6 +23,12 @@ var map;
 var pos, addr, geocoder;
 var electionData = null;
 
+// Switches from auto screen to manual screen.
+// Temporary workaround to demonstrate functionality.
+function changeToManualScreen() {
+    $("#load-data-auto").hide();
+    $("#load-data-manual").show();
+}
 
 // Look up state by full name name, return its abbreviation
 function stateNameToAbbrev(statename) {
@@ -60,7 +68,11 @@ function getAddressWithState() {
 // Takes a state abbreviated name (e.g., "MA")
 // Looks up voter stats with our 'voterinfo' endpoint, and displays using 'little man' bar graph
 function showVoterInfo(stateAbbrev) {
+    $("#load-data-auto").hide();
+    $("#load-data-manual").hide();
+    $("#display-data").show();
     $("#locator-progress-bar").show();
+    $("#bottom-container").show();
 
     // Make this string safe to pass in URL
     var encodedState = encodeURI(abbrevToStateName(stateAbbrev));
@@ -92,6 +104,8 @@ function showVoterInfo(stateAbbrev) {
             // Animation complete.
         });
 
+        $("#men").show();
+
 
         if (ratio >= 2) {
             caption = `If you had voted in the ${electionData.year} ${state} congressional election, your vote would have the weight of <b><i>${ratio.toPrecision(3)}</i></b> eligible voters in a full turn-out election`;
@@ -114,15 +128,21 @@ function showVoterInfo(stateAbbrev) {
 
 function initMap() {
     geocoder = new google.maps.Geocoder;
-    $("#lbutton").click(lookupStateFromInput);
+    $("#lbutton").click( (event) => {
+        lookupStateFromInput(event);
+    });
     $("#locator").click(geolocate);
 }
 
 /**
 Grab the STATE from input text field, and look up using geocoder, display on map
  */
-function lookupStateFromInput() {
+function lookupStateFromInput(event) {
+    event.preventDefault();
+    $("#load-data-manual").hide();
+    $("#display-data").show();
     $("#locator-progress-bar").show();
+    $("#bottom-container").show();
     var state = $("#state").val();
     console.log("user entered location "+state);
 
@@ -167,7 +187,11 @@ function getStateNameFromResults(results) {
 
 // Try to find user's location from their browser location API (probably uses IP address)
 function geolocate() {
+    $("#load-data-auto").hide();
+    $("#load-data-manual").hide();
+    $("#display-data").show();
     $("#locator-progress-bar").show();
+    $("#bottom-container").show();
 
     // Try HTML5 geolocation.
     if (navigator.geolocation) {

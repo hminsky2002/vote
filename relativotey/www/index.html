@@ -47,28 +47,33 @@
     </head>
 
 	<body>
-		<div class="container">
+		<div class="container" id="top-container">
 			<div id="map"></div>
-			<div class="relativotey-container">
+			<div class="relativotey-container" id="load-data-auto">
 				<img src="logo-trans.png" alt="Relativotey" width="360" alt="Relativotey logo" />
-				<button id="locator" type="button"><img src="locate-icon.png" width="16px" height="16px"/>Automatically Find My Location</button> or choose
+				<button id="locator" type="button"><img src="locate-icon.png" width="16px" height="16px"/>Automatically Find My Location</button>
+				<button id="manual-locate" type="button" onclick="changeToManualScreen()">Choose State/Address Manually</button>
+			</div>
+			<div class="relativotey-container" id="load-data-manual">
+				<img src="logo-trans.png" alt="Relativotey" width="360" alt="Relativotey logo" />
 				<form>
-					<label for="state">State</label>
+					<label for="state">Select State</label>
 					<select id="state"><option></option></select>
-					<label for="userAddress">Street, City</label>
+					<label for="userAddress">Type Your Street Address and City</label>
 					<input type="text" id="userAddress" name="address" placeholder="Optional" />
 					<button id="lbutton">How Much Is My Vote Worth?!</button>
 				</form>
-				
+			</div>
+			<div class="relativotey-container" id="display-data">
+				<img src="logo-trans.png" alt="Relativotey" width="360" alt="Relativotey logo" />
 				<div id="locator-progress-bar">
 					<img src="progress-meter.gif" width="64" height="64" alt="Loading...">
 				</div>
-	
 				<div id="men"></div>
 				<div id="caption"></div>
 			</div>
 		</div>
-		<div class="container">
+		<div class="container" id="bottom-container">
 			<div class="explanation-container">
 				<h1>Here's where...</h1>
 				<p>Explanations would go!</p>
