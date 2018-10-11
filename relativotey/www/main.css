@@ -54,7 +54,8 @@ a:hover {
     width: 30vw;
     min-width: 400px;
     z-index: 10;
-    padding: 10vh 0;
+    padding: 10vh 20px;
+    text-align: center;
 }
 
 .relativotey-container button {
@@ -85,20 +86,34 @@ a:hover {
     margin-top: 10px;
 }
 
+.explanation-container {
+    text-align: center;
+    padding: 20px;
+}
+
+#load-data-auto {
+    justify-content: center;
+    display: none;
+}
+
+#load-data-auto button {
+    margin-top: 50px;
+}
+
+#load-data-manual {
+    display: none;
+}
+
+#bottom-container {
+    display: none;
+}
+
 #men {
     background-image: url('men-transparent.png');
     opacity: 0.7;
+    height: 220px;
     display: none;
-}
-
-#caption {
-    display: none;
-}
-
-.selector { 
-    display: inline-block; 
-    float: left; 
-    margin: 4px; 
+    margin: auto;
 }
 
 #map { 
@@ -107,10 +122,6 @@ a:hover {
     bottom: 0; 
     width: 100%;
     z-index: -1;
-}
-
-#locator-progress-bar {
-    display: none;
 }
 
 /* INTERACTIVE MENU */
