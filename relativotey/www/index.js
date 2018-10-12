@@ -63,11 +63,53 @@ function getAddressWithState() {
     }
 }
 
-// http://relativotey.org/code/voterinfo?town=Brookline  --> {...}
+// return ratio of voters to eligible population in district
+function lookupRatioByDistrict(state, district) {
+    var ratio = null;
+    // match state and district
+    for (var index in by_district) {
+	var entry = by_district[index];
+	if (entry.state == state && entry.district == district) {
+	    ratio = entry.relative_vote_share;
+	    break;
+	}
+    }
+
+    // If we didn't have per-district info, back off to using per-state info
+    if (ratio == null) {
+	for (var index in turnoutByState) {
+	    var entry = turnoutByState[index];
+	    if (entry.State == state) {
+		ratio = entry.Voting_Eligible_Population_VEP / entry.Total_Ballots_Counted;
+		break;
+	    }
+	}
+    }
+
+    return ratio;
+
+}
+
+
+// look up by state in the turnout.js dataset
+function lookupByState(stateName) {
+    var result = null;
+    // match state 
+    for (var index in turnoutByState) {
+	var entry = turnoutByState[index];
+	if (entry.State == stateName) {
+	    result = entry;
+	}
+    }
+    return result;
+}
+
+
+
 
 // Takes a state abbreviated name (e.g., "MA")
 // Looks up voter stats with our 'voterinfo' endpoint, and displays using 'little man' bar graph
-function showVoterInfo(stateAbbrev) {
+function showVoterInfo(stateAbbrev, district) {
     $("#load-data-auto").hide();
     $("#load-data-manual").hide();
     $("#display-data").show();
@@ -77,27 +119,19 @@ function showVoterInfo(stateAbbrev) {
     // Make this string safe to pass in URL
     var encodedState = encodeURI(abbrevToStateName(stateAbbrev));
     // TODO url is hardcoded for development. Remove "https://www.relativotey.org/" in production.
-    var url = `https://www.relativotey.org/sql/voterinfo?state=${encodedState}`;
-
     var state = abbrevToStateName(stateAbbrev);
 
-    $.getJSON(url, function(mydata) {
-        console.log("got data from voterinfo: ", JSON.stringify(mydata));
-        electionData = mydata;
+    $("#locator-progress-bar").hide();
 
-        $("#locator-progress-bar").hide();
+    // Look up election data from 'database', we will make this an SQL query when we have a real db
+    //var electionData = edb[state.toLowerCase()];
 
-        // Look up election data from 'database', we will make this an SQL query when we have a real db
-        //var electionData = edb[state.toLowerCase()];
 
-        console.log("election data = ",electionData);
-        var caption = "";
+    var ratio = lookupRatioByDistrict(state, district);
 
-        if (electionData != null && electionData.data_found){
-        
-        //$("#caption").html("You entered a state of "+state + " registered = "+electionData.registered+ ", voted = "+electionData.voted);
-        var ratio =  electionData.registered / electionData.voted;
-
+    var caption = "";
+    
+    if (ratio != null) {
         $( "#men" ).animate({
             width: MAN_WIDTH * ratio,
         }, 1000, function() {
@@ -106,25 +140,24 @@ function showVoterInfo(stateAbbrev) {
 
         $("#men").show();
 
-
         if (ratio >= 2) {
-            caption = `If you had voted in the ${electionData.year} ${state} congressional election, your vote would have the weight of <b><i>${ratio.toPrecision(3)}</i></b> eligible voters in a full turn-out election`;
+            caption = `If you had voted in the ${state} congressional election, your vote would have the weight of <b><i>${ratio.toPrecision(3)}</i></b> eligible voters in a full turn-out election`;
         } else {
-            caption = `If you had voted in the ${electionData.year} ${state} congressional election, your vote would be worth <b><i>${ratio.toPrecision(3)*100}%</i></b> of its original value in a full turn-out election`
+            caption = `If you had voted in the ${state} congressional election, your vote would be worth <b><i>${ratio.toPrecision(3)*100}%</i></b> of its original value in a full turn-out election`
         }
-        } else {
+    }  else {
         // No election data, either no state was entered or there's no data for it
         if (state == "") {
             caption = `Please enter a state name`;
         } else {
             caption = `Sorry we don't have complete election data on your state, ${state}, for any recent congressional election`;
-        }
+        } 
+    }
         
-        }
-        $("#caption").html(caption)
 
-    });
+   $("#caption").html(caption)
 }
+
 
 function initMap() {
     geocoder = new google.maps.Geocoder;
@@ -150,7 +183,7 @@ function lookupStateFromInput(event) {
     // geocodeAddress(state,geocoder,map);
 
     addressToDistrictInfo(getAddressWithState(), showDistrictOnMap);
-    showVoterInfo(state);
+
 }
 
 /** Display city's location on map, using city name from input field */
@@ -227,7 +260,6 @@ function geolocate() {
                 $("#userAddress").val(streetAddr);
 
                 addressToDistrictInfo(getAddressWithState(), showDistrictOnMap);
-                showVoterInfo(stateAbbrev);
 
                 //infoWindow.setContent(results[0].formatted_address);
                 //infoWindow.open(map, marker);
@@ -338,6 +370,8 @@ function showDistrictOnMap(response, rawResponse) {
 
     // Shows MapBox district boundary map for this state/district
     gFocusMap(state, districtCode);
+    showVoterInfo(state, parseInt(district));
+
 }
 
 
