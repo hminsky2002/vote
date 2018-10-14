@@ -70,7 +70,7 @@ function lookupRatioByDistrict(state, district) {
     for (var index in by_district) {
 	var entry = by_district[index];
 	if (entry.state == state && entry.district == district) {
-	    ratio = entry.relative_vote_share;
+	    ratio = entry.population / entry.voted;
 	    break;
 	}
     }
