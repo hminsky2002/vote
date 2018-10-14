@@ -141,9 +141,9 @@ function showVoterInfo(stateAbbrev, district) {
         $("#men").show();
 
         if (ratio >= 2) {
-            caption = `If you had voted in the ${state} congressional election, your vote would have the weight of <b><i>${ratio.toPrecision(3)}</i></b> eligible voters in a full turn-out election`;
+            caption = `Based on data from the 2014 congressional election, by voting in the ${district} congressional district of ${state}, you'd have represented <b><i>${ratio.toPrecision(3)}</i></b> members of your district with your voice`;
         } else {
-            caption = `If you had voted in the ${state} congressional election, your vote would be worth <b><i>${ratio.toPrecision(3)*100}%</i></b> of its original value in a full turn-out election`
+            caption = `Based on data from the 2014 congressional election, by voting in the ${district} congressional district of ${state}, you'd have represented <b><i>${ratio.toPrecision(3)*100}%</i></b> members of your district with your voice`
         }
     }  else {
         // No election data, either no state was entered or there's no data for it
@@ -165,7 +165,7 @@ function initMap() {
         lookupStateFromInput(event);
     });
     $("#locator").click(geolocate);
-    geolocate();
+    
 }
 
 /**
