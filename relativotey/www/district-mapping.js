@@ -157,6 +157,8 @@ $( document ).ready(
 		console.log('setting gFocusMap to ', focusMap);
 		gFocusMap = focusMap;
 
+		geolocate();
+
 
 		// Check the URL hash to determine how the map should be focused
 		function checkHash() {

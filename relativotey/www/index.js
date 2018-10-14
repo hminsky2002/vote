@@ -165,6 +165,7 @@ function initMap() {
         lookupStateFromInput(event);
     });
     $("#locator").click(geolocate);
+    geolocate();
 }
 
 /**
