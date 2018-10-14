@@ -130,7 +130,12 @@ https://developers.google.com/civic-information/docs/v2/representatives/represen
 Sends back embedded map of congressional district
 https://github.com/aaronpdennis/congress-maps
 
-python -m SimpleHTTPServer 8080
+python -m SimpleHTTPServer 8080b
 
 time gcloud app deploy --version test
+
+
+alias cloudsql='cloud_sql_proxy -instances=votedb-216400:us-central1:voter-db-micro=tcp:3306 &'
+
+alias deploy="yes Y | time gcloud app deploy --version test"
 
