@@ -104,6 +104,10 @@ a:hover {
     display: none;
 }
 
+#loading-screen {
+    display: none;
+}
+
 #bottom-container {
     display: none;
 }
@@ -114,6 +118,9 @@ a:hover {
     height: 220px;
     display: none;
     margin: auto;
+}
+#another-district {
+    display: none;
 }
 
 #map { 

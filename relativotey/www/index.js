@@ -1,6 +1,6 @@
 $(document).ready(function(){
     $("#display-data").hide();
-    $("#load-data-auto").show();
+    $("#loading-screen").show();
     $("#state").keypress(function( event ) {
         if ( event.which == 13 ) {
             lookupStateFromInput();
@@ -104,28 +104,23 @@ function lookupByState(stateName) {
     return result;
 }
 
-
-
-
 // Takes a state abbreviated name (e.g., "MA")
 // Looks up voter stats with our 'voterinfo' endpoint, and displays using 'little man' bar graph
 function showVoterInfo(stateAbbrev, district) {
     $("#load-data-auto").hide();
     $("#load-data-manual").hide();
-    $("#display-data").show();
-    $("#locator-progress-bar").show();
-    $("#bottom-container").show();
+    $("#loading-screen").hide();
 
     // Make this string safe to pass in URL
     var encodedState = encodeURI(abbrevToStateName(stateAbbrev));
     // TODO url is hardcoded for development. Remove "https://www.relativotey.org/" in production.
     var state = abbrevToStateName(stateAbbrev);
 
-    $("#locator-progress-bar").hide();
+    $("#display-data").show();
+    $("#bottom-container").show();
 
     // Look up election data from 'database', we will make this an SQL query when we have a real db
     //var electionData = edb[state.toLowerCase()];
-
 
     var ratio = lookupRatioByDistrict(state, district);
 
@@ -178,9 +173,7 @@ Grab the STATE from input text field, and look up using geocoder, display on map
 function lookupStateFromInput(event) {
     event.preventDefault();
     $("#load-data-manual").hide();
-    $("#display-data").show();
-    $("#locator-progress-bar").show();
-    $("#bottom-container").show();
+    $("#loading-screen").show();
     var state = $("#state").val();
     console.log("user entered location "+state);
 
@@ -222,70 +215,78 @@ function getStateNameFromResults(results) {
     return statename;
 }
 
+function geolocateSuccess(position) {
+    pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+    };
+
+    //infoWindow.setPosition(pos);
+
+    // convert lat,lon to address
+    geocoder.geocode({'location': pos}, function(results, status) {
+        if (status === 'OK') {
+        if (results[0]) {
+            /* map.setZoom(6);
+        var marker = new google.maps.Marker({
+        position: pos,
+        map: map
+        });
+            */
+            addr = results;
+            //var geozip = a1.formatted_address.match(/,\s\w{2}\s(\d{5})/)[1];
+            //console.log("geozip = "+geozip);
+            //$("#zip").val(geozip);
+            fullStateName = getStateNameFromResults(addr)
+            stateAbbrev = stateNameToAbbrev(fullStateName);
+            console.log("geolocate: state=",fullStateName);
+            $("#state").val(stateAbbrev);
+
+            // grab full street level address, can be used to find congressional district
+            var streetAddr = results[0].formatted_address;
+            $("#userAddress").val(streetAddr);
+
+            addressToDistrictInfo(getAddressWithState(), showDistrictOnMap);
+
+            //infoWindow.setContent(results[0].formatted_address);
+            //infoWindow.open(map, marker);
+        } else {
+            window.alert('No results found');
+        }
+        } else {
+        window.alert('Geocoder failed due to: ' + status);
+        }
+
+        //map.setCenter(pos);
+    }, function() {
+        handleLocationError(true, map.getCenter());
+    });
+}
+
+function geolocateFailure(err) {
+    $("#load-data-auto").hide();
+    $("#display-data").hide();
+    $("#loading-screen").hide();
+    $("#bottom-container").hide();
+    $("#load-data-manual").show();
+}
 
 // Try to find user's location from their browser location API (probably uses IP address)
 function geolocate() {
     $("#load-data-auto").hide();
     $("#load-data-manual").hide();
-    $("#display-data").show();
-    $("#locator-progress-bar").show();
-    $("#bottom-container").show();
+    $("#display-data").hide();
+    $("#bottom-container").hide();
+    $("#loading-screen").show();
 
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-        pos = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-        };
-
-        //infoWindow.setPosition(pos);
-
-        // convert lat,lon to address
-        geocoder.geocode({'location': pos}, function(results, status) {
-            if (status === 'OK') {
-            if (results[0]) {
-                /* map.setZoom(6);
-            var marker = new google.maps.Marker({
-            position: pos,
-            map: map
-            });
-                */
-                addr = results;
-                //var geozip = a1.formatted_address.match(/,\s\w{2}\s(\d{5})/)[1];
-                //console.log("geozip = "+geozip);
-                //$("#zip").val(geozip);
-                fullStateName = getStateNameFromResults(addr)
-                stateAbbrev = stateNameToAbbrev(fullStateName);
-                console.log("geolocate: state=",fullStateName);
-                $("#state").val(stateAbbrev);
-
-                // grab full street level address, can be used to find congressional district
-                var streetAddr = results[0].formatted_address;
-                $("#userAddress").val(streetAddr);
-
-                addressToDistrictInfo(getAddressWithState(), showDistrictOnMap);
-
-                //infoWindow.setContent(results[0].formatted_address);
-                //infoWindow.open(map, marker);
-            } else {
-                window.alert('No results found');
-            }
-            } else {
-            window.alert('Geocoder failed due to: ' + status);
-            }
-
-            //map.setCenter(pos);
-            $("#locator-progress-bar").hide();
-        }, function() {
-            $("#locator-progress-bar").hide();
-            handleLocationError(true, map.getCenter());
-        });
-        }
-        )} else {
+        navigator.geolocation.getCurrentPosition(geolocateSuccess, geolocateFailure)
+    } else {
         // Browser doesn't support Geolocation
         //handleLocationError(false, infoWindow, map.getCenter());
-        $("#locator-progress-bar").hide();
+        $("#loading-screen").hide();
+        $("#load-data-manual").show();
         }
     }
 
