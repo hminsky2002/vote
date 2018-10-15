@@ -158,6 +158,10 @@ function showVoterInfo(stateAbbrev, district) {
    $("#caption").html(caption)
 }
 
+function browseDisticts() {
+	    window.location.href = "browse.html";
+}
+
 
 function initMap() {
     geocoder = new google.maps.Geocoder;

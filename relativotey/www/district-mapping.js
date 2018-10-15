@@ -33,6 +33,8 @@ for (d in possibleDistricts) {
 
 var gFocusMap;
 var gDistrict;
+var gMap;
+
 
 $( document ).ready(
     function () {
@@ -80,6 +82,10 @@ $( document ).ready(
 		center: continental.center,
 		zoom: continental.zoom
 	    });
+
+	    gMap = map;
+
+
 	    
 	    // Once map is fully loaded...
 	    map.on('load', function() {
@@ -208,7 +214,7 @@ $( document ).ready(
 		
 		// Record that it is no longer the initial page load
 		initial = false;
-		
+
 		// A click handler that shows what was under the cursor where
 		// the user clicked.
 		map.on("click", function(e) {
@@ -229,7 +235,11 @@ $( document ).ready(
 			// The feature properties come from the original GeoJSON uploaded to Mapbox.
 			district = features[0].properties;
 			gDistrict = district;
-			console.log(`click handler, district = ${district}`);
+
+			var state = abbrevToStateName(district.state);
+			var ratio = lookupRatioByDistrict(state, district.number);
+
+			console.log(`my mapbox click handler, district =  ${district.state} ${district.number} ratio=${ratio}`);
 		    } 
 		    
 		});
