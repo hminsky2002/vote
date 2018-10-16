@@ -104,6 +104,24 @@ function lookupByState(stateName) {
     return result;
 }
 
+// Adds "st/nd/rd/th" suffix to district number
+function addSuffixToDistrict(district) {
+    const districtAsString = district.toString();
+    const lastDigitOfString = districtAsString.charAt(districtAsString.length-1);
+    if (lastDigitOfString === "1") {
+        return districtAsString.concat("st");
+    }
+    else if (lastDigitOfString === "2") {
+        return districtAsString.concat("nd");
+    }
+    else if (lastDigitOfString === "3") {
+        return districtAsString.concat("rd");
+    }
+    else {
+        return districtAsString.concat("th");
+    }
+}
+
 // Takes a state abbreviated name (e.g., "MA")
 // Looks up voter stats with our 'voterinfo' endpoint, and displays using 'little man' bar graph
 function showVoterInfo(stateAbbrev, district) {
@@ -135,10 +153,12 @@ function showVoterInfo(stateAbbrev, district) {
 
         $("#men").show();
 
+        const districtWithSuffix = addSuffixToDistrict(district);
+
         if (ratio >= 2) {
-            caption = `Based on data from the 2014 congressional election, by voting in the ${district} congressional district of ${state}, you'd have represented <b><i>${ratio.toPrecision(3)}</i></b> members of your district with your voice`;
+            caption = `Based on data from the 2014 congressional election, by voting in the ${districtWithSuffix} congressional district of ${state}, you'd have represented <b><i>${ratio.toPrecision(3)}</i></b> members of your district with your voice`;
         } else {
-            caption = `Based on data from the 2014 congressional election, by voting in the ${district} congressional district of ${state}, you'd have represented <b><i>${ratio.toPrecision(3)*100}%</i></b> members of your district with your voice`
+            caption = `Based on data from the 2014 congressional election, by voting in the ${districtWithSuffix} congressional district of ${state}, you'd have represented <b><i>${ratio.toPrecision(3)*100}%</i></b> members of your district with your voice`
         }
     }  else {
         // No election data, either no state was entered or there's no data for it
