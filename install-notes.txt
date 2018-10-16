@@ -130,7 +130,7 @@ https://developers.google.com/civic-information/docs/v2/representatives/represen
 Sends back embedded map of congressional district
 https://github.com/aaronpdennis/congress-maps
 
-python -m SimpleHTTPServer 8080b
+python -m SimpleHTTPServer 8080
 
 time gcloud app deploy --version test
 

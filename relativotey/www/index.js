@@ -155,11 +155,18 @@ function showVoterInfo(stateAbbrev, district) {
         $("#men").show();
 
         const districtWithSuffix = addSuffixToDistrict(district);
+	var districtPretty = `the ${districtWithSuffix} congressional district of `;
 
-        if (ratio >= 2) {
-            caption = `Based on data from the 2014 congressional election, by voting in the ${districtWithSuffix} congressional district of ${state}, you'd have represented <b><i>${ratio.toPrecision(3)}</i></b> members of your district with your voice.`;
+	if (district == null) {
+	    districtPretty = "";
+	}
+
+      if (ratio >= 2) {
+	  
+	  
+            caption = `Based on data from the 2014 congressional election, by voting in ${districtPretty} ${state}, you'd have represented <b><i>${ratio.toPrecision(3)}</i></b> members of your district with your voice.`;
         } else {
-            caption = `Based on data from the 2014 congressional election, by voting in the ${districtWithSuffix} congressional district of ${state}, you'd have represented <b><i>${ratio.toPrecision(3)*100}%</i></b> members of your district with your voice.`
+            caption = `Based on data from the 2014 congressional election, by voting in ${districtPretty} ${state}, you'd have represented <b><i>${ratio.toPrecision(3)*100}%</i></b> members of your district with your voice.`
         }
     }  else {
         // No election data, either no state was entered or there's no data for it
@@ -393,7 +400,7 @@ function showDistrictOnMap(response, rawResponse) {
     if (district != "" && district != null) {
         districtCode = zeroPad(district, 2);
     }
-    console.log(`district=${district}, districtCode=${districtCode}`);
+    console.log(`district=${district}, districtCode=${districtCode}, state=${state}`);
 
     // Shows MapBox district boundary map for this state/district
     gFocusMap(state, districtCode);
