@@ -23,10 +23,11 @@ var map;
 var pos, addr, geocoder;
 var electionData = null;
 
-// Switches from auto screen to manual screen.
-// Temporary workaround to demonstrate functionality.
+// Enables manual district selection screen.
 function changeToManualScreen() {
     $("#load-data-auto").hide();
+    $("#display-data").hide();
+    $("#loading-screen").hide();
     $("#load-data-manual").show();
 }
 
