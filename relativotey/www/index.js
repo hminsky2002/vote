@@ -1,5 +1,7 @@
 $(document).ready(function(){
     $("#display-data").hide();
+    $("#vote-encourage").hide();
+    $("#vote-power-share").hide();
     $("#loading-screen").show();
     $("#state").keypress(function( event ) {
         if ( event.which == 13 ) {
@@ -27,6 +29,8 @@ var electionData = null;
 function changeToManualScreen() {
     $("#load-data-auto").hide();
     $("#display-data").hide();
+    $("#vote-encourage").hide();
+    $("#vote-power-share").hide();
     $("#loading-screen").hide();
     $("#load-data-manual").show();
 }
@@ -136,6 +140,8 @@ function showVoterInfo(stateAbbrev, district) {
     var state = abbrevToStateName(stateAbbrev);
 
     $("#display-data").show();
+    $("#vote-encourage").css({"display":"flex"});
+    $("#vote-encourage").css({"display":"flex"});
     $("#bottom-container").show();
 
     // Look up election data from 'database', we will make this an SQL query when we have a real db
@@ -294,6 +300,8 @@ function geolocateSuccess(position) {
 function geolocateFailure(err) {
     $("#load-data-auto").hide();
     $("#display-data").hide();
+    $("#vote-encourage").hide();
+    $("#vote-power-share").hide();
     $("#loading-screen").hide();
     $("#bottom-container").hide();
     $("#load-data-manual").show();
@@ -304,6 +312,8 @@ function geolocate() {
     $("#load-data-auto").hide();
     $("#load-data-manual").hide();
     $("#display-data").hide();
+    $("#vote-encourage").hide();
+    $("#vote-power-share").hide();
     $("#bottom-container").hide();
     $("#loading-screen").show();
 

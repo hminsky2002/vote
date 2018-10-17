@@ -131,6 +131,49 @@ a:hover {
     z-index: -1;
 }
 
+.vote-encourage {
+    background-color: lightgreen;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    height: 100px;
+    width: 300px;
+    z-index: 10;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.vote-box-text {
+    margin: 0;
+    text-align: center;
+}
+
+.vote-box-icons {
+    display: flex;
+    margin-top: 10px;
+}
+
+.vote-box-icons i {
+    margin: 0 10px;
+    font-size: 24px;
+}
+
+.vote-power-share {
+    background-color: lightgreen;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    height: 100px;
+    width: 300px;
+    z-index: 10;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 /* INTERACTIVE MENU */
 #menu {
     position: absolute;
