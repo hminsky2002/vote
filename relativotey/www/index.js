@@ -173,19 +173,21 @@ function showVoterInfo(stateAbbrev, district) {
         }
 
         const districtWithSuffix = addSuffixToDistrict(district);
-	var districtPretty = `the ${districtWithSuffix} congressional district of `;
-
-	if (district == null) {
-	    districtPretty = "";
-	}
-
-      if (ratio >= 2) {
-	  
-	  
-            caption = `Based on data from the 2014 congressional election, by voting in ${districtPretty} ${state}, you'd have represented <b><i>${ratio.toPrecision(3)}</i></b> members of your district with your voice.`;
-        } else {
-            caption = `Based on data from the 2014 congressional election, by voting in ${districtPretty} ${state}, you'd have represented <b><i>${ratio.toPrecision(3)*100}%</i></b> members of your district with your voice.`
+        var districtPretty = `the ${districtWithSuffix} Congressional District of `;
+        var ratioStringForCaption = null;
+        if (ratio >= 2) {
+            ratioStringForCaption = `${ratio.toPrecision(3)}`;
         }
+        else {
+            ratioStringForCaption = `${ratio.toPrecision(3)*100}%`;
+        }
+
+        if (district == null) {
+            districtPretty = "";
+        }
+
+        caption = `Based on data from the 2014 Congressional election, by voting in ${districtPretty} ${state}, you'd have represented <b><i>${ratioStringForCaption}</i></b> members of your district with your voice.`;
+
     }  else {
         // No election data, either no state was entered or there's no data for it
         if (state == "") {
