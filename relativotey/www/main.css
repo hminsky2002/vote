@@ -131,7 +131,7 @@ a:hover {
     z-index: -1;
 }
 
-.vote-encourage {
+#vote-encourage {
     background-color: lightgreen;
     position: absolute;
     bottom: 10px;
@@ -160,7 +160,7 @@ a:hover {
     font-size: 24px;
 }
 
-.vote-power-share {
+#vote-power-share {
     background-color: lightgreen;
     position: absolute;
     bottom: 10px;
