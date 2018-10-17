@@ -66,28 +66,33 @@ function getAddressWithState() {
 
 // return ratio of voters to eligible population in district
 function lookupRatioByDistrict(state, district) {
-    var ratio = null;
+    var data = { ratio: 0, population: 0, voted: 0};
+
     // match state and district
     for (var index in by_district) {
 	var entry = by_district[index];
 	if (entry.state == state && entry.district == district) {
-	    ratio = entry.population / entry.voted;
+	    data.population = entry.population;
+	    data.voted = entry.voted;
+	    data.ratio = entry.population / entry.voted;
 	    break;
 	}
     }
 
     // If we didn't have per-district info, back off to using per-state info
-    if (ratio == null) {
+    if (data.ratio == null) {
 	for (var index in turnoutByState) {
 	    var entry = turnoutByState[index];
 	    if (entry.State == state) {
-		ratio = entry.Voting_Eligible_Population_VEP / entry.Total_Ballots_Counted;
+		data.population = entry.Voting_Eligible_Population_VEP;
+		data.voted = entry.Total_Ballots_Counted;
+		data.ratio = entry.Voting_Eligible_Population_VEP / entry.Total_Ballots_Counted;
 		break;
 	    }
 	}
     }
 
-    return ratio;
+    return data;
 
 }
 
@@ -141,7 +146,9 @@ function showVoterInfo(stateAbbrev, district) {
     // Look up election data from 'database', we will make this an SQL query when we have a real db
     //var electionData = edb[state.toLowerCase()];
 
-    var ratio = lookupRatioByDistrict(state, district);
+    var data = lookupRatioByDistrict(state, district);
+    var ratio = data.ratio;
+    
 
     var caption = "";
     
@@ -202,7 +209,18 @@ function showVoterInfo(stateAbbrev, district) {
     }
         
 
-   $("#caption").html(caption)
+   $("#caption").html(caption);
+
+   var explanation = `<h1>What's going on</h1>
+		population = ${data.population}<br>
+           voted = ${data.voted}<br>
+           ratio = ${data.ratio.toPrecision(3)}
+
+     `;
+
+   $('#explanation').html(explanation);
+
+
 }
 
 function browseDisticts() {
