@@ -27,6 +27,7 @@ function changeToManualScreen() {
     $("#load-data-auto").hide();
     $("#display-data").hide();
     $("#loading-screen").hide();
+    $("#bottom-container").hide();
     $("#load-data-manual").show();
 }
 
@@ -174,7 +175,8 @@ function showVoterInfo(stateAbbrev, district) {
 
         const districtWithSuffix = addSuffixToDistrict(district);
         var districtPretty = `the ${districtWithSuffix} Congressional District of `;
-        var ratioStringForCaption = null;
+        var districtOrState = "district";
+        var ratioStringForCaption = undefined;
         if (ratio >= 2) {
             ratioStringForCaption = `${ratio.toPrecision(3)}`;
         }
@@ -182,11 +184,13 @@ function showVoterInfo(stateAbbrev, district) {
             ratioStringForCaption = `${ratio.toPrecision(3)*100}%`;
         }
 
-        if (district == null) {
+        // If no district number ("not a number"), it will clean up caption to be only about the state.
+        if (isNaN(district)) {
             districtPretty = "";
+            districtOrState = "state";
         }
 
-        caption = `Based on data from the 2014 Congressional election, by voting in ${districtPretty} ${state}, you'd have represented <b><i>${ratioStringForCaption}</i></b> members of your district with your voice.`;
+        caption = `Based on data from the 2014 Congressional election, by voting in ${districtPretty} ${state}, you'd have represented <b><i>${ratioStringForCaption}</i></b> members of your ${districtOrState} with your voice.`;
 
     }  else {
         // No election data, either no state was entered or there's no data for it
