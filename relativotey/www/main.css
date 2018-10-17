@@ -13,7 +13,24 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-} 
+}
+
+button {
+    background-color: #94D58E;
+    border: 1px solid gray;
+    border-radius: 10px;
+    color: black;
+    font-size: 24px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+}
+
+button:hover {
+    background-color: darkgreen;
+    color: white;
+    cursor: pointer;
+}
 
 h1 { 
     font-weight: 300;
@@ -58,10 +75,6 @@ a:hover {
     text-align: center;
 }
 
-.relativotey-container button {
-    font-size: 24px;
-}
-
 .relativotey-container form {
     display: flex;
     flex-direction: column;
@@ -82,8 +95,7 @@ a:hover {
 }
 
 .relativotey-container form button {
-    font-size: 24px;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
 .explanation-container {
@@ -130,6 +142,10 @@ a:hover {
 .people-crop img {
     display: block;
     margin: 0;
+}
+
+.buttons button {
+    margin-top: 10px;
 }
 
 #another-district {
