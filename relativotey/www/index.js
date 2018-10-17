@@ -18,7 +18,6 @@ $(document).ready(function(){
     });
 });
 
-var MAN_WIDTH=89
 var map;
 var pos, addr, geocoder;
 var electionData = null;
@@ -146,13 +145,32 @@ function showVoterInfo(stateAbbrev, district) {
     var caption = "";
     
     if (ratio != null) {
-        $( "#men" ).animate({
-            width: MAN_WIDTH * ratio,
-        }, 1000, function() {
-            // Animation complete.
-        });
+        var PERSON_WIDTH = 80; // in px
+        var cropWidthNumber = PERSON_WIDTH * (ratio - Math.floor(ratio));
+        var cropWidthWithUnits = `${cropWidthNumber}px`;
+        var cropWidthNegPercent = `-${(1 - (ratio - Math.floor(ratio))) * 100}%`;
+        console.log(ratio, cropWidthNumber, cropWidthWithUnits, cropWidthNegPercent);
 
-        $("#men").show();
+        // Clear the div of any existing people (i.e. from previous searches)
+        $("#people").empty();
+
+        // Populate the div with people
+        for (let i = 0; i < Math.floor(ratio); i++) {
+            $("#people").append('<div class="people-nocrop"><img src="person-transparentbkgnd.png" /></div>');
+        }
+
+        // For the fraction of a person, set the CSS appropriately.
+        // div: set width
+        // img: set margin right as a negative %
+        if (ratio !== Math.floor(ratio)) {
+            $("#people").append('<div class="people-crop"><img src="person-transparentbkgnd.png" /></div>');
+            $(".people-crop").css({
+                "width": cropWidthWithUnits
+            });
+            $(".people-crop img").css({
+                "margin-right": cropWidthNegPercent
+            });
+        }
 
         const districtWithSuffix = addSuffixToDistrict(district);
 	var districtPretty = `the ${districtWithSuffix} congressional district of `;
