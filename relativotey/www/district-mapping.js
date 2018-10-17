@@ -237,9 +237,17 @@ $( document ).ready(
 			gDistrict = district;
 
 			var state = abbrevToStateName(district.state);
-			var ratio = lookupRatioByDistrict(state, district.number);
+			var data = lookupRatioByDistrict(state, district.number);
+			// district: ${district.state} ${district.number}<br> 
+			var stuff = `<table border=0><tr><td align=right>population<td align=left>${numberWithCommas(data.population)}<tr><td align=right>voted<td align=left>${numberWithCommas(data.voted)}<tr><td align=right>ratio<td align=left>${data.ratio.toPrecision(2)}</table>`;
+			console.log(stuff);
+			console.log(e);
+			$('#legend').html(stuff);
+			$('#legend').show();
+			$('#legend').css('z-index', 20);
+			$('#legend').css('left', e.point.x);
+			$('#legend').css('top',  e.point.y);
 
-			console.log(`my mapbox click handler, district =  ${district.state} ${district.number} ratio=${ratio}`);
 		    } 
 		    
 		});
@@ -293,3 +301,7 @@ $( document ).ready(
     });
 
 
+
+const numberWithCommas = (x) => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}

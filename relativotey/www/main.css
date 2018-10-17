@@ -161,6 +161,23 @@ a:hover {
     z-index: -1;
 }
 
+#legend {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 10px;
+    background-color: #0a0a0a;
+    color: #eeeeee;
+    position: absolute; 
+    top: 0; 
+    bottom: 0; 
+    width: 200px;
+    height: 85px;
+    opacity: 0.8;
+    z-index: 12;
+}
+    
+
 /* INTERACTIVE MENU */
 #menu {
     position: absolute;

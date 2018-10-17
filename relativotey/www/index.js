@@ -212,9 +212,10 @@ function showVoterInfo(stateAbbrev, district) {
    $("#caption").html(caption);
 
    var explanation = `<h1>What's going on</h1>
-		population = ${data.population}<br>
-           voted = ${data.voted}<br>
-           ratio = ${data.ratio.toPrecision(3)}
+		Location: ${districtPretty} ${state} <br>
+		Eligible Voter Population: ${data.population}<br>
+           Number Who Voted In Last Election: ${data.voted}<br>
+           Eligible Voters / Actual Votes: ${data.ratio.toPrecision(3)}
 
      `;
 

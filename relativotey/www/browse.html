@@ -41,6 +41,14 @@
     <script src='./by_district.js'></script>
     <script src='./turnout.js'></script>
 
+    <script>
+     $(document).ready(function(){
+	 $('#map').css('z-index', 10);
+
+	 $("#legend").hide();
+     })
+    </script>
+
 	<script async defer
 		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADJxsP1i4tyoH4W9u88fGq_-YeVmNdODY&callback=initMap">
 	</script>
@@ -51,6 +59,7 @@
 	<body>
 		<div class="container" id="top-container">
 			<div id="map"></div>
+			<div id="legend"></div>
 
 		</div>
 		<div class="container" id="bottom-container">
