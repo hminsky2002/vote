@@ -46,6 +46,8 @@
 	</script>
 	<script async defer src="https://apis.google.com/js/client.js?onload=googleAPICallback"></script>
 
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+
     </head>
 
 	<body>
@@ -79,6 +81,18 @@
 				<div class="buttons">
 					<button id="another" onclick="changeToManualScreen()">Look Up Another Address</button>
 					<button id="browse" onclick="browseDisticts()">Browse Districts</button>
+				</div>
+			</div>
+			<div id="vote-encourage">
+				<p class="vote-box-text">Did this information encourage you to vote?<br />
+					[] Yes [] No [Submit]
+				</p>
+			</div>
+			<div id="vote-power-share">
+				<p class="vote-box-text">Share your voting power:</p>
+				<div class="vote-box-icons">
+					<i class="fa fa-facebook"></i>
+					<i class="fa fa-twitter-square"></i>
 				</div>
 			</div>
 		</div>
