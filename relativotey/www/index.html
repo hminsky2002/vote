@@ -5,7 +5,7 @@
 	<link rel="stylesheet" href="main.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+	<!-- <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"> -->
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="HandheldFriendly" content="true">
 	
@@ -77,7 +77,10 @@
 			<div class="relativotey-container" id="display-data">
 				<img src="logo-trans.png" alt="Relativotey" width="360" alt="Relativotey logo" />
 				<div id="people"></div>
-				<div id="caption"></div>
+				<div class="caption-container">
+					<div id="caption"></div>
+					<button id="explain" onclick="scrollToExplanation()">Where Does This Number Come From?</button>
+				</div>
 				<div class="buttons">
 					<button id="another" onclick="changeToManualScreen()">Look Up Another Address</button>
 					<button id="browse" onclick="browseDisticts()">Browse Districts</button>
@@ -85,7 +88,7 @@
 			</div>
 			<div id="vote-encourage">
 				<p class="vote-box-text">Did this information encourage you to vote?<br />
-					[] Yes [] No [Submit]
+					<[] Yes [] No [Submit]>
 				</p>
 			</div>
 			<div id="vote-power-share">
@@ -97,10 +100,7 @@
 			</div>
 		</div>
 		<div class="container" id="bottom-container">
-			<div class="explanation-container" id="explanation">
-				<h1>Here's where...</h1>
-				<p>Explanations would go!</p>
-			</div>
+			<div class="explanation-container" id="explanation"></div>
 		</div>
 	</body>
 </html>
