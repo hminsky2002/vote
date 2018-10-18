@@ -87,9 +87,14 @@
 				</div>
 			</div>
 			<div id="vote-encourage">
-				<p class="vote-box-text">Did this information encourage you to vote?<br />
-					<[] Yes [] No [Submit]>
-				</p>
+				<p class="vote-box-text">Did this information encourage you to vote?</p>
+				<form class="vote-encourage-form">
+					<input type="radio" name="encourage" id="encourage-yes" value="Yes">
+					<label for="encourage-yes">Yes</label>
+					<input type="radio" name="encourage" id="encourage-no" value="No">
+					<label for="encourage-no">No</label>
+					<button>Submit</button>
+				</form>
 			</div>
 			<div id="vote-power-share">
 				<p class="vote-box-text">Share your voting power:</p>
