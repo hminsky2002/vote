@@ -215,9 +215,7 @@ $( document ).ready(
 		// Record that it is no longer the initial page load
 		initial = false;
 
-		// A click handler that shows what was under the cursor where
-		// the user clicked.
-		map.on("click", function(e) {
+                function browseDistrict(e) {
 		    var district = null;
 		    
 		    // The map control provides a client-side-only way to determine what
@@ -239,7 +237,7 @@ $( document ).ready(
 			var state = abbrevToStateName(district.state);
 			var data = lookupRatioByDistrict(state, district.number);
 			// district: ${district.state} ${district.number}<br> 
-			var stuff = `<table border=0><tr><td align=right>population<td align=left>${numberWithCommas(data.population)}<tr><td align=right>voted<td align=left>${numberWithCommas(data.voted)}<tr><td align=right>ratio<td align=left>${data.ratio.toPrecision(2)}</table>`;
+			var stuff = `<table border=0><tr><th colspan=2>${abbrevToStateName(district.state)} district ${district.number}<tr><td align=left>Voting Population:<td align=left>${numberWithCommas(data.population)}<tr><td align=left>Voted Last Election:<td align=left>${numberWithCommas(data.voted)}<tr><td align=left>One Vote Has Power of:<td align=left style="font-size:14px"><b>${data.ratio.toPrecision(2)} voters</b></table>`;
 			console.log(stuff);
 			console.log(e);
 			$('#legend').html(stuff);
@@ -249,8 +247,14 @@ $( document ).ready(
 			$('#legend').css('top',  e.point.y);
 
 		    } 
-		    
+		    }
+
+		// A click handler that shows what was under the cursor where
+		// the user clicked.
+		map.on("click", function(e) {
+			   browseDistrict(e);
 		});
+
 		
 	    });
 
