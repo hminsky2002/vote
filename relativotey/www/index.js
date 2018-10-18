@@ -1,7 +1,7 @@
 $(document).ready(function(){
     $("#display-data").hide();
-    $("#vote-encourage").hide();
-    $("#vote-power-share").hide();
+    $("#vote-encourage").css({"display":"none"});
+    $("#vote-power-share").css({"display":"none"});
     $("#loading-screen").show();
     $("#state").keypress(function( event ) {
         if ( event.which == 13 ) {
