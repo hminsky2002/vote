@@ -31,7 +31,7 @@ function changeToManualScreen() {
     $("#vote-encourage").css({"display":"none"});
     $("#vote-power-share").css({"display":"none"});
     $("#loading-screen").hide();
-    $("#bottom-container").hide();
+    $("#bottom-container").css({"display":"none"});
     $("#load-data-manual").show();
 }
 
@@ -147,7 +147,7 @@ function showVoterInfo(stateAbbrev, district) {
     $("#display-data").show();
     $("#vote-encourage").css({"display":"flex"});
     $("#vote-power-share").css({"display":"flex"});
-    $("#bottom-container").show();
+    $("#bottom-container").css({"display":"flex"});
 
     // Look up election data from 'database', we will make this an SQL query when we have a real db
     //var electionData = edb[state.toLowerCase()];
@@ -217,13 +217,16 @@ function showVoterInfo(stateAbbrev, district) {
 
    $("#caption").html(caption);
 
-   var explanation = `<h1>What's going on</h1>
-		Location: ${districtPretty} ${state} <br>
-		Eligible Voter Population: ${data.population}<br>
-           Number Who Voted In Last Election: ${data.voted}<br>
-           Eligible Voters / Actual Votes: ${data.ratio.toPrecision(3)}
-
-     `;
+   var explanation = `<h2 class="explanation-header">How Your Vote Counts</h2>
+   <h2 class="explanation-header">in ${districtPretty} ${state}</h2>
+   <div class="explanation-text"><p>Out of a total district population of</p></div>
+   <div class="explanation-number"><p>${data.population.toLocaleString()}</p></div>
+   <div class="explanation-text"><p>the number of people who voted in the 2014 election is</p></div>
+   <div class="explanation-number"><p>${data.voted.toLocaleString()}</p></div>
+   <div class="explanation-text"><p>and each one of those voters represented</p></div>
+   <div class="explanation-number"><p>${data.ratio.toPrecision(3)}</p></div>
+   <div class="explanation-text"><p>people with their voice.</p></div>
+   <button class="explanation-button" onclick="scrollToTop()">Back to Top</button>`;
 
    $('#explanation').html(explanation);
 
@@ -346,7 +349,7 @@ function geolocateFailure(err) {
     $("#vote-encourage").css({"display":"none"});
     $("#vote-power-share").css({"display":"none"});
     $("#loading-screen").hide();
-    $("#bottom-container").hide();
+    $("#bottom-container").css({"display":"none"});
     $("#load-data-manual").show();
 }
 
@@ -357,7 +360,7 @@ function geolocate() {
     $("#display-data").hide();
     $("#vote-encourage").css({"display":"none"});
     $("#vote-power-share").css({"display":"none"});
-    $("#bottom-container").hide();
+    $("#bottom-container").css({"display":"none"});
     $("#loading-screen").show();
 
     // Try HTML5 geolocation.
@@ -472,4 +475,20 @@ function zeroPad(num, places) {
  */
 function googleAPICallback() {
     gapi.client.setApiKey('AIzaSyCzPmoqSuBu_wgzwuRauq0V0LQYtY919Ik');
+}
+
+function scrollToExplanation() {
+    document.querySelector('#bottom-container').scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+        inline: 'nearest'
+    });
+}
+
+function scrollToTop() {
+    document.querySelector('#top-container').scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+        inline: 'nearest'
+    });
 }
