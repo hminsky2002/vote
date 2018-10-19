@@ -1,7 +1,7 @@
 $(document).ready(function(){
     $("#display-data").hide();
-    $("#vote-encourage").css({"display":"none"});
-    $("#vote-power-share").css({"display":"none"});
+    $("#vote-encourage-desktop").css({"display":"none"});
+    $("#vote-power-share-desktop").css({"display":"none"});
     $("#loading-screen").show();
     $("#state").keypress(function( event ) {
         if ( event.which == 13 ) {
@@ -28,8 +28,8 @@ var electionData = null;
 function changeToManualScreen() {
     $("#load-data-auto").hide();
     $("#display-data").hide();
-    $("#vote-encourage").css({"display":"none"});
-    $("#vote-power-share").css({"display":"none"});
+    $("#vote-encourage-desktop").css({"display":"none"});
+    $("#vote-power-share-desktop").css({"display":"none"});
     $("#loading-screen").hide();
     $("#bottom-container").css({"display":"none"});
     $("#load-data-manual").show();
@@ -145,8 +145,8 @@ function showVoterInfo(stateAbbrev, district) {
     var state = abbrevToStateName(stateAbbrev);
 
     $("#display-data").show();
-    $("#vote-encourage").css({"display":"flex"});
-    $("#vote-power-share").css({"display":"flex"});
+    $("#vote-encourage-desktop").css({"display":"flex"});
+    $("#vote-power-share-desktop").css({"display":"flex"});
     $("#bottom-container").css({"display":"flex"});
 
     // Look up election data from 'database', we will make this an SQL query when we have a real db
@@ -230,6 +230,23 @@ function showVoterInfo(stateAbbrev, district) {
 
    $('#explanation').html(explanation);
 
+   var encourageToVote = `<p class="vote-box-text">Did this information encourage you to vote?</p>
+   <form class="vote-encourage-form" action="/sql/survey">
+        <input type="hidden" name="question" value="encouraged_to_vote"/>
+       <input type="radio" name="response" id="encourage-yes" value="Yes">
+       <label for="encourage-yes">Yes</label>
+       <input type="radio" name="response" id="encourage-no" value="No">
+       <label for="encourage-no">No</label>
+       <button>Submit</button>
+   </form>`;
+   $('.vote-encourage').html(encourageToVote);
+
+   var shareVotingPower = `<p class="vote-box-text">Share your voting power:</p>
+   <div class="vote-box-icons">
+       <a href="http://www.facebook.com"><i class="fa fa-facebook"></i></a>
+       <a href="http://www.twitter.com"><i class="fa fa-twitter-square"></i></a>
+   </div>`;
+   $('.vote-power-share').html(shareVotingPower);
 
 }
 
@@ -346,8 +363,8 @@ function geolocateSuccess(position) {
 function geolocateFailure(err) {
     $("#load-data-auto").hide();
     $("#display-data").hide();
-    $("#vote-encourage").css({"display":"none"});
-    $("#vote-power-share").css({"display":"none"});
+    $("#vote-encourage-desktop").css({"display":"none"});
+    $("#vote-power-share-desktop").css({"display":"none"});
     $("#loading-screen").hide();
     $("#bottom-container").css({"display":"none"});
     $("#load-data-manual").show();
@@ -358,8 +375,8 @@ function geolocate() {
     $("#load-data-auto").hide();
     $("#load-data-manual").hide();
     $("#display-data").hide();
-    $("#vote-encourage").css({"display":"none"});
-    $("#vote-power-share").css({"display":"none"});
+    $("#vote-encourage-desktop").css({"display":"none"});
+    $("#vote-power-share-desktop").css({"display":"none"});
     $("#bottom-container").css({"display":"none"});
     $("#loading-screen").show();
 
