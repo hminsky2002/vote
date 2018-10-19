@@ -79,8 +79,6 @@ a:hover {
 .relativotey-container form {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
     text-align: center;
 }
 
@@ -181,7 +179,7 @@ a:hover {
     display: none
 }
     
-#vote-encourage-desktop {
+#vote-encourage {
     background-color: lightgreen;
     position: absolute;
     bottom: 10px;
@@ -211,7 +209,7 @@ a:hover {
     font-size: 24px;
 }
 
-#vote-power-share-desktop {
+#vote-power-share {
     background-color: lightgreen;
     position: absolute;
     bottom: 10px;
@@ -266,10 +264,6 @@ a:hover {
     font-size: inherit;
 }
 
-#vote-encourage-mobile, #vote-power-share-mobile {
-    display: none;
-}
-
 /* INTERACTIVE MENU */
 #menu {
     position: absolute;
@@ -286,75 +280,24 @@ a:hover {
 }
 
 /* Tablet Landscape */
-/* @media screen and (max-width: 1060px) {
+@media screen and (max-width: 1060px) {
     #primary { width:67%; }
     #secondary { width:30%; margin-left:3%;}  
-} */
+}
 /* Tablet Portrait */
-/* @media screen and (max-width: 768px) {
+@media screen and (max-width: 768px) {
     #primary { width:100%; }
     #secondary { width:100%; margin:0; border:none; }
-} */
+}
 
-@media only screen and (max-width: 960px) { 
+@media (max-width: 960px) { 
     body {
         font-size: 1rem;
     } 
 } 
 
-@media only screen and (max-height: 750px) {
+@media (max-height: 750px) {
     #people img {
         width: 60px;
-    }
-}
-
-/* Responsive on mobile */
-@media only screen and (max-width: 600px) {
-    body {
-        min-height: calc(100vh - 50px);
-    }
-    button {
-        font-size: 1.2em;
-        padding: 5px;
-    }
-    .container {
-        min-height: calc(100vh - 50px);
-        height: 100%;
-    }
-    .relativotey-container {
-        height: 90%;
-        width: 90%;
-        min-width: auto;
-        padding: 5px;
-    }
-    .relativotey-container img {
-        max-width: 80vw;
-    }
-    #vote-encourage-desktop, #vote-power-share-desktop {
-        display: none !important;
-    }
-    #people img {
-        width: 60px;
-    }
-    #vote-encourage-mobile {
-        background-color: lightgreen;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        padding: 10px;
-    }
-    #vote-power-share-mobile {
-        background-color: lightgreen;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        padding: 10px;
-    }
-    .vote-box-icons a {
-        font-size: 1.4em;
     }
 }
