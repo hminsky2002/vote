@@ -53,7 +53,7 @@ def connect_to_cloudsql():
 class MainPage(webapp2.RequestHandler):
     def get(self):
         """Makes a SQL query to voter db, returns result as JSON"""
-        self.response.headers['Content-Type'] = 'text/plain'
+        self.response.headers['Content-Type'] = 'text/html'
         self.response.headers['Access-Control-Allow-Origin'] = "*"
 
         db = connect_to_cloudsql()
@@ -64,7 +64,7 @@ class MainPage(webapp2.RequestHandler):
         cursor.execute("""insert into survey_response (question, response, timestamp) values (%s, %s, %s)""", (question, response, timestamp))
         cursor.execute("commit")
 
-        self.response.write(json.dumps({"response": "OK"}))
+        self.response.write('<head><link rel="stylesheet" href="/main.css"><body><h1>Thank You!</h1> <a href="/">Return to www.relativotey.org</a>')
 
 app = webapp2.WSGIApplication([
     ('.*', MainPage),

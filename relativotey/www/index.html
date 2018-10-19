@@ -88,10 +88,11 @@
 			</div>
 			<div id="vote-encourage">
 				<p class="vote-box-text">Did this information encourage you to vote?</p>
-				<form class="vote-encourage-form">
-					<input type="radio" name="encourage" id="encourage-yes" value="Yes">
+				<form class="vote-encourage-form" action="/sql/survey">
+				        <input type="hidden" name="question" value="encouraged_to_vote"/>
+					<input type="radio" name="response" id="encourage-yes" value="Yes">
 					<label for="encourage-yes">Yes</label>
-					<input type="radio" name="encourage" id="encourage-no" value="No">
+					<input type="radio" name="response" id="encourage-no" value="No">
 					<label for="encourage-no">No</label>
 					<button>Submit</button>
 				</form>
