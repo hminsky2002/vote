@@ -5,7 +5,7 @@
 	<link rel="stylesheet" href="main.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-	<!-- <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"> -->
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="HandheldFriendly" content="true">
 	
@@ -86,27 +86,13 @@
 					<button id="browse" onclick="browseDisticts()">Browse Districts</button>
 				</div>
 			</div>
-			<div id="vote-encourage">
-				<p class="vote-box-text">Did this information encourage you to vote?</p>
-				<form class="vote-encourage-form" action="/sql/survey">
-				        <input type="hidden" name="question" value="encouraged_to_vote"/>
-					<input type="radio" name="response" id="encourage-yes" value="Yes">
-					<label for="encourage-yes">Yes</label>
-					<input type="radio" name="response" id="encourage-no" value="No">
-					<label for="encourage-no">No</label>
-					<button>Submit</button>
-				</form>
-			</div>
-			<div id="vote-power-share">
-				<p class="vote-box-text">Share your voting power:</p>
-				<div class="vote-box-icons">
-					<a href="http://www.facebook.com"><i class="fa fa-facebook"></i></a>
-					<a href="http://www.twitter.com"><i class="fa fa-twitter-square"></i></a>
-				</div>
-			</div>
+			<div class="vote-encourage" id="vote-encourage-desktop"></div>
+			<div class="vote-power-share" id="vote-power-share-desktop"></div>
 		</div>
 		<div class="container" id="bottom-container">
 			<div class="explanation-container" id="explanation"></div>
+			<div class="vote-encourage" id="vote-encourage-mobile"></div>
+			<div class="vote-power-share" id="vote-power-share-mobile"></div>
 		</div>
 	</body>
 </html>
