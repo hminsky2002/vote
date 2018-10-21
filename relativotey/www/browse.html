@@ -41,6 +41,7 @@
     <script src='./by_district.js'></script>
     <script src='./turnout.js'></script>
 
+
     <script>
      $(document).ready(function(){
 	 $('#map').css('z-index', 10);
@@ -59,6 +60,23 @@
 		<div class="container" id="top-container">
 			<div id="map"></div>
 			<div id="legend"></div>
+
+			<!-- INTERACTIVE MENU -->
+			<div id='menu'>
+			    <div class="selector">
+				State:
+				<select id='state'>
+				    <option value=""></option>
+				</select>
+			    </div>
+			    <div class="selector">
+				District:
+				<select id='district'>
+				    <option value=''></option>
+				</select>
+			    </div>
+			</div>
+
 
 		</div>
 		<div class="container" id="bottom-container">
