@@ -995,12 +995,49 @@ var by_district = [
     "population": 770493,
     "voted": 224077
   },
-  {
-    "state": "Kansas",
-    "district": 4,
-    "population": 725183,
-    "voted": 208153
-  },
+    {
+	"state": "Kansas",
+	"district": 4,
+	"population": 725183,
+	"voted": 208153
+    },
+    {
+	"state": "Kentucky",
+	"district": 1,
+	"population": 	716177,
+	"voted": 236618
+    },
+    {
+	"state": "Kentucky",
+	"district": 2,
+	"population": 	760681,
+	"voted": 226834
+    },
+    {
+	"state": "Kentucky",
+	"district": 3,
+	"population": 	746559,
+	"voted": 247355
+    },
+    {
+	"state": "Kentucky",
+	"district": 4,
+	"population": 	760043,
+	"voted": 222158
+    },
+    {
+	"state": "Kentucky",
+	"district": 5,
+	"population": 	696337,
+	"voted": 218967
+    },
+    {
+	"state": "Kentucky",
+	"district": 6,
+	"population": 	774392,
+	"voted": 245694
+    },
+
   {
     "state": "Massachusetts",
     "district": 1,
@@ -1333,7 +1370,7 @@ var by_district = [
   },
   {
     "state": "Montana",
-    "district": 1,
+    "district": 0,
     "population": 1050493,
     "voted": 367963
   },
@@ -2478,19 +2515,19 @@ var by_district = [
     "voted": 181492
   },
   {
-    "state": "W. Virginia",
+    "state": "West Virginia",
     "district": 1,
     "population": 611376,
     "voted": 144737
   },
   {
-    "state": "W. Virginia",
+    "state": "West Virginia",
     "district": 2,
     "population": 621635,
     "voted": 154250
   },
   {
-    "state": "W. Virginia",
+    "state": "West Virginia",
     "district": 3,
     "population": 582846,
     "voted": 140401

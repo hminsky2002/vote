@@ -237,7 +237,7 @@ $( document ).ready(
 			var state = abbrevToStateName(district.state);
 			var data = lookupRatioByDistrict(state, district.number);
 			// district: ${district.state} ${district.number}<br> 
-			var stuff = `<table border=0><tr><th colspan=2>${abbrevToStateName(district.state)} district ${district.number}<tr><td align=left>Voting Population:<td align=left>${numberWithCommas(data.population)}<tr><td align=left>Voted Last Election:<td align=left>${numberWithCommas(data.voted)}<tr><td align=left>One Vote Has Power of:<td align=left style="font-size:14px"><b>${data.ratio.toPrecision(2)} voters</b></table>`;
+			var stuff = `<table border=0><tr><th colspan=2>${abbrevToStateName(district.state)} district ${district.number}<tr><td align=left>Total Population:<td align=left>${numberWithCommas(data.population)}<tr><td align=left>Voted Last Election:<td align=left>${numberWithCommas(data.voted)}<tr><td align=left>One Vote Has Power of:<td align=left style="font-size:14px"><b>${data.ratio.toPrecision(2)} voters</b></table>`;
 			console.log(stuff);
 			console.log(e);
 			$('#legend').html(stuff);
