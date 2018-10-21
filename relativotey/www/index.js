@@ -241,10 +241,22 @@ function showVoterInfo(stateAbbrev, district) {
    </form>`;
    $('.vote-encourage').html(encourageToVote);
 
+   // how to post to twitter:
+   // http://twitter.com/share?text=text goes here&url=http://url goes here&hashtags=hashtag1,hashtag2,hashtag3
+
+   var twitter_text = encodeURI(`One voter in ${districtPretty} ${state} represents ${data.ratio.toPrecision(3)} people with their voice.`);
+
+
+   var twitter_url = encodeURI(`http://www.relativotey.org`);
+   var hashtags = encodeURI("#relativotey,#vote");
+
    var shareVotingPower = `<p class="vote-box-text">Share your voting power:</p>
    <div class="vote-box-icons">
-       <a href="http://www.facebook.com"><i class="fa fa-facebook"></i></a>
-       <a href="http://www.twitter.com"><i class="fa fa-twitter-square"></i></a>
+
+
+<div class="fb-share-button" data-href="https://www.relativotey.org" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.relativotey.org%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore"><i class="fa fa-facebook"></i></a></div>
+
+       <a href="http://www.twitter.com/share?text=${twitter_text}&url=${twitter_url}&hashtags=${hashtags}"><i class="fa fa-twitter-square"></i></a>
    </div>`;
    $('.vote-power-share').html(shareVotingPower);
 
