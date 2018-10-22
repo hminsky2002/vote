@@ -285,9 +285,6 @@ a:hover {
     font-family: 'Open Sans', Arial, sans-serif;
 }
 
-.selector { display: inline-block; float: left; margin: 4px; }
-
-
 /* Tablet Landscape */
 /* @media screen and (max-width: 1060px) {
     #primary { width:67%; }
@@ -361,3 +358,4 @@ a:hover {
         font-size: 1.4em;
     }
 }
+
