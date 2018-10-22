@@ -10,6 +10,7 @@ $(document).ready(function(){
     });
 
     $("#state").change(function( event ) {
+        console.log(`ondocument.ready: #state menu changed, looking up ${$("#state").val()}`);
         lookupStateFromInput();
     });
     
@@ -312,7 +313,7 @@ function getStateNameFromResults(results) {
         var component = entry.address_components;
         for (index2 in component) {
         var addr = component[index2];
-        console.log("checking addr = ", addr, addr.long_name, addr.types);
+        //console.log("checking addr = ", addr, addr.long_name, addr.types);
         var long_name = addr.long_name;
         var types = addr.types;
         if (types.includes("administrative_area_level_1")){
@@ -353,9 +354,11 @@ function geolocateSuccess(position) {
 
             // grab full street level address, can be used to find congressional district
             var streetAddr = results[0].formatted_address;
+	    console.log(`geolocateSuccess: streetAddr = ${streetAddr}`);
             $("#userAddress").val(streetAddr);
 
-            addressToDistrictInfo(getAddressWithState(), showDistrictOnMap);
+//            addressToDistrictInfo(getAddressWithState(), showDistrictOnMap);
+            addressToDistrictInfo(streetAddr, showDistrictOnMap);
 
             //infoWindow.setContent(results[0].formatted_address);
             //infoWindow.open(map, marker);
