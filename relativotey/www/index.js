@@ -263,7 +263,7 @@ function showVoterInfo(stateAbbrev, district) {
 }
 
 function browseDisticts() {
-	    window.location.href = "browse.html";
+	    window.location.href = `browse.html#state=${stateAbbrev}`;
 }
 
 
