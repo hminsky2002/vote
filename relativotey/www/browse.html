@@ -142,6 +142,7 @@
 	<script src='./bboxes.js'></script>
 
 	<script>
+	 var gState, gStatePrev, gDistrict;
 
 	 //** MODIFY THIS SECTION
 	 // Specify YOUR Mapbox default access token
@@ -251,40 +252,41 @@
 		     if (districtCode) $('#district').val(districtCode);
 
 		     // For each district color layer in the map, apply some filters...
-			 for (var i = 1; i <= 5; i++) {
+			 /*
+			    for (var i = 1; i <= 5; i++) {
 
-			     // The filter that filters based on color is the one we want to preserve
-			     // If there are already multiple filters applied, it will be the last one
-			     var exisitingFilter = map.getFilter('districts_' + i);
-			     if (exisitingFilter[0] === 'all') {
-				 exisitingFilter = exisitingFilter[exisitingFilter.length - 1];
-			     }
+			    // The filter that filters based on color is the one we want to preserve
+			    // If there are already multiple filters applied, it will be the last one
+			    var exisitingFilter = map.getFilter('districts_' + i);
+			    if (exisitingFilter[0] === 'all') {
+			    exisitingFilter = exisitingFilter[exisitingFilter.length - 1];
+			    }
 
-			     // Create a fresh filter to be applied
-			     var filter = ['all'];
+			    // Create a fresh filter to be applied
+			    var filter = ['all'];
 
-			     // Add filters for the focus state and district number
-			     if (stateAbbr) filter.push(['==', 'state', stateAbbr]);
-			     if (districtCode) filter.push(['==', 'number', districtCode]);
+			    // Add filters for the focus state and district number
+			    if (stateAbbr) filter.push(['==', 'state', stateAbbr]);
+			    if (districtCode) filter.push(['==', 'number', districtCode]);
 
-			     // Add the existing color filter
-			     var layerFilter = filter.concat([exisitingFilter]);
+			    // Add the existing color filter
+			    var layerFilter = filter.concat([exisitingFilter]);
 
-			     // Set new layer filter for each district layer in the map
-			     map.setFilter('districts_' + i, layerFilter);
-			     map.setFilter('districts_' + i + '_boundary', layerFilter);
-			     map.setFilter('districts_' + i + '_label', layerFilter);
+			    // Set new layer filter for each district layer in the map
+			    map.setFilter('districts_' + i, layerFilter);
+			    map.setFilter('districts_' + i + '_boundary', layerFilter);
+			    map.setFilter('districts_' + i + '_label', layerFilter);
 
-			 }
+			    }
 
-		     // Create a generic filter for the focus state and district number that does not include color filtering
-		     var boundaryFilter = ['all'];
-		     if (stateAbbr) boundaryFilter.push(['==', 'state', stateAbbr]);
-		     if (districtCode) boundaryFilter.push(['==', 'number', districtCode]);
+			    // Create a generic filter for the focus state and district number that does not include color filtering
+			    var boundaryFilter = ['all'];
+			    if (stateAbbr) boundaryFilter.push(['==', 'state', stateAbbr]);
+			    if (districtCode) boundaryFilter.push(['==', 'number', districtCode]);
 
-		     // Apply the generic filter to the boundary lines
-		     map.setFilter('districts_boundary_line', boundaryFilter);
-
+			    // Apply the generic filter to the boundary lines
+			    map.setFilter('districts_boundary_line', boundaryFilter);
+			  */
 		     // Determine current window height and width and whether the bbox should focus on a single district
 		     var height = window.innerHeight,
 			 width = window.innerWidth,
@@ -325,130 +327,138 @@
 
 
 
-			     } else {
-				 // If there is no URL hash...
-				     // And if its not the first time the page is loading...
-				     if (!initial) {
+			 } else {
+			     // If there is no URL hash...
+				 // And if its not the first time the page is loading...
+				 if (!initial) {
 
-					 // Reset the map style to its original style object and jump back to the continental view
-					 map.setStyle(baseStyle);
-					 map.jumpTo(continentalView(window.innerWidth/2, window.innerHeight/2));
+				     // Reset the map style to its original style object and jump back to the continental view
+				     map.setStyle(baseStyle);
+				     map.jumpTo(continentalView(window.innerWidth/2, window.innerHeight/2));
 
-					 //** INTERACTIVE MENU
-					 // Empty the list of districts because no state is selected
-					 $('#district').empty();
-				     }
-			     }
+				     //** INTERACTIVE MENU
+				     // Empty the list of districts because no state is selected
+				     $('#district').empty();
+				 }
 			 }
+		 }
 
-                     function browseDistrictFromMouseEvent(e) {
-			 var district = null;
+                 function browseDistrictFromMouseEvent(e) {
+		     var district = null;
+		     
+		     // The map control provides a client-side-only way to determine what
+		     // is under the cursor. We restrict the query to only the layers that
+		     // provide congressional district polygons. Note that this only scans
+		     // features that are currently shown on the map. So if you've filtered
+		     // the districts so only a state or a single district is showing, this
+		     // will restrict the query to those districts.
+			 var features = map.queryRenderedFeatures(
+			     e.point,
+			     {
+				 layers: ["districts_1", "districts_2", "districts_3", "districts_4", "districts_5"]
+			     });
+		     if (features.length > 0) {
+			 // The feature properties come from the original GeoJSON uploaded to Mapbox.
+			     district = features[0].properties;
+			 gDistrict = district;
 			 
-			 // The map control provides a client-side-only way to determine what
-			 // is under the cursor. We restrict the query to only the layers that
-			 // provide congressional district polygons. Note that this only scans
-			 // features that are currently shown on the map. So if you've filtered
-			 // the districts so only a state or a single district is showing, this
-			 // will restrict the query to those districts.
-			     var features = map.queryRenderedFeatures(
-				 e.point,
-				 {
-				     layers: ["districts_1", "districts_2", "districts_3", "districts_4", "districts_5"]
-				 });
-			 if (features.length > 0) {
-			     // The feature properties come from the original GeoJSON uploaded to Mapbox.
-				 district = features[0].properties;
-			     gDistrict = district;
+			 var state = abbrevToStateName(district.state);
+			 gStatePrev = gState;
+			 gState = district.state;
+			 displayLegendForStateAndDistrict(state, district.number, e.point.x, e.point.y);
 
-			     var state = abbrevToStateName(district.state);
-			     displayLegendForStateAndDistrict(state, district.number, e.point.x, e.point.y);
+		     } 
+		 }
 
-			 } 
-		     }
+		 function displayLegendForStateAndDistrict(state, districtNumber, x, y) {
+		     var data = lookupRatioByDistrict(state, districtNumber);
+		     // district: ${district.state} ${district.number}<br> 
+		     var stuff = `<table border=0><tr><th colspan=2>${state} district ${districtNumber}<tr><td align=left>Voting Population:<td align=left>${numberWithCommas(data.population)}<tr><td align=left>Voted Last Election:<td align=left>${numberWithCommas(data.voted)}<tr><td align=left>Your Vote has power of:<td align=left ><b>${data.ratio.toPrecision(2)} voters</b></table>`;
+		     console.log(stuff);
+		     $('#legend').html(stuff);
+		     $('#legend').show();
+		     $('#legend').css('z-index', 20);
+		     $('#legend').css('left', x+15);
+		     $('#legend').css('top',  y+10);
 
-		     function displayLegendForStateAndDistrict(state, districtNumber, x, y) {
-			 var data = lookupRatioByDistrict(state, districtNumber);
-			 // district: ${district.state} ${district.number}<br> 
-			 var stuff = `<table border=0><tr><th colspan=2>${state} district ${districtNumber}<tr><td align=left>Voting Population:<td align=left>${numberWithCommas(data.population)}<tr><td align=left>Voted Last Election:<td align=left>${numberWithCommas(data.voted)}<tr><td align=left>Your Vote has power of:<td align=left ><b>${data.ratio.toPrecision(2)} voters</b></table>`;
-			 console.log(stuff);
-			 $('#legend').html(stuff);
-			 $('#legend').show();
-			 $('#legend').css('z-index', 20);
-			 $('#legend').css('left', x);
-			 $('#legend').css('top',  y);
+		 }
 
-		     }
-
-		     // A click handler that shows what was under the cursor where
-		     // the user clicked.
-			 map.on("click", function(e) {
-			     browseDistrictFromMouseEvent(e);
-			 });
+		 // A click handler that shows what was under the cursor where
+		 // the user clicked.
+		     map.on("click", function(e) {
+			 browseDistrictFromMouseEvent(e);
+		     });
 
 
-
-		     // When the URL hash changes, call the checkHash function
-		     window.onhashchange = checkHash;
-
-		     // Record that it initial page load and the hash still needs to be checked
-		     var initial = true;
-		     checkHash();
-
-		     // Record that it is no longer the initial page load
-		     initial = false;
-
-		     // A click handler that shows what was under the cursor where
-		     // the user clicked.
-
-
+		 map.on("mousemove", function(e) {
+		     browseDistrictFromMouseEvent(e);
 		 });
 
-	     } else {
 
-		 // If Mapbox GL is not supported
-		 // Log this information to the console (perhaps an alert that the website is not fully featured would be better?)
-		 console.log('Mapbox GL not supported');
 
-		 // Initialize the map
-		 L.mapbox.accessToken = accessToken;
-		 var map = L.mapbox.map('map').setView(continental.center, continental.zoom);
-		 L.mapbox.styleLayer(styleURL).addTo(map);
 
-		 // Redefine the focusMap function from above
-		 function focusMap(stateAbbr, districtCode) {
-		     var height = window.innerHeight,
-			 width = window.innerWidth,
-			 districtAbbr = districtCode ? districtCode : '';
-
-		     var view = geoViewport.viewport(bboxes[stateAbbr + districtAbbr], [width/2, height/2]);
-		     map.setView([view.center[1], view.center[0]], view.zoom + 1);
-
-		 }
-
-		 // Redefine the checkHash function from above
-		 function checkHash() {
-		     if(window.location.hash) {
-			 var hash = window.location.hash;
-			 var hashData = hash.substring(1).split('&').map(function(d) { return d.split('=') });
-
-			 var state, district;
-			 hashData.map(function(d) {
-			     if (d[0] === 'state') state = d[1];
-			     if (d[0] === 'district') district = d[1];
-			 })
-
-			 if (state || (state && district)) focusMap(state, district);
-		     }
-		 }
-
-		 // Create an event listener for changes in the URL hash
+		 // When the URL hash changes, call the checkHash function
 		 window.onhashchange = checkHash;
+
+		 // Record that it initial page load and the hash still needs to be checked
+		 var initial = true;
 		 checkHash();
 
+		 // Record that it is no longer the initial page load
+		 initial = false;
+
+		 // A click handler that shows what was under the cursor where
+		 // the user clicked.
+
+
+	     });
+
+	 } else {
+
+	     // If Mapbox GL is not supported
+	     // Log this information to the console (perhaps an alert that the website is not fully featured would be better?)
+	     console.log('Mapbox GL not supported');
+
+	     // Initialize the map
+	     L.mapbox.accessToken = accessToken;
+	     var map = L.mapbox.map('map').setView(continental.center, continental.zoom);
+	     L.mapbox.styleLayer(styleURL).addTo(map);
+
+	     // Redefine the focusMap function from above
+	     function focusMap(stateAbbr, districtCode) {
+		 var height = window.innerHeight,
+		     width = window.innerWidth,
+		     districtAbbr = districtCode ? districtCode : '';
+
+		 var view = geoViewport.viewport(bboxes[stateAbbr + districtAbbr], [width/2, height/2]);
+		 map.setView([view.center[1], view.center[0]], view.zoom + 1);
+
 	     }
-	     const numberWithCommas = (x) => {
-		 return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+	     // Redefine the checkHash function from above
+	     function checkHash() {
+		 if(window.location.hash) {
+		     var hash = window.location.hash;
+		     var hashData = hash.substring(1).split('&').map(function(d) { return d.split('=') });
+
+		     var state, district;
+		     hashData.map(function(d) {
+			 if (d[0] === 'state') state = d[1];
+			 if (d[0] === 'district') district = d[1];
+		     })
+
+		     if (state || (state && district)) focusMap(state, district);
+		 }
 	     }
+
+	     // Create an event listener for changes in the URL hash
+	     window.onhashchange = checkHash;
+	     checkHash();
+
+	 }
+	 const numberWithCommas = (x) => {
+	     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	 }
 
 
 
