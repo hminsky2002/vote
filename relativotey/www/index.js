@@ -248,7 +248,7 @@ function showVoterInfo(stateAbbrev, district) {
    // how to post to twitter:
    // http://twitter.com/share?text=text goes here&url=http://url goes here&hashtags=hashtag1,hashtag2,hashtag3
 
-   var twitter_text = encodeURI(`My vote in ${districtPretty} ${state} would count for ${data.ratio.toPrecision(2)} people. How many people are you voting for in November? I’m tagging ${data.ratio.toPrecision(1)} people to check this out and pass it on: relativotey.org #showup`);
+   var twitter_text = encodeURI(`My vote in ${districtPretty} ${state} counts for ${data.ratio.toPrecision(2)} people. How many people are you voting for in November? I'm tagging ${data.ratio.toPrecision(1)} people to check this out and pass it on: relativotey.org #showup`);
 
    var twitter_url = encodeURI(`http://www.relativotey.org`);
    var hashtags = encodeURI("#relativotey,#vote");
