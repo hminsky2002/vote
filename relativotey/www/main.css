@@ -270,6 +270,33 @@ a:hover {
     display: none;
 }
 
+.about-container {
+    background-color: #eeeeee;
+    text-align: center;
+    margin: 20px 0;
+    padding: 20px;
+    width: 80vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.about-container h2 {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.button-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.button-row button {
+    width: 40%;
+}
+
 /* INTERACTIVE MENU */
 #menu {
     position: absolute;

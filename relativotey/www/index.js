@@ -227,7 +227,10 @@ function showVoterInfo(stateAbbrev, district) {
    <div class="explanation-text"><p>and each one of those voters represented</p></div>
    <div class="explanation-number"><p>${data.ratio.toPrecision(3)}</p></div>
    <div class="explanation-text"><p>people with their voice.</p></div>
-   <button class="explanation-button" onclick="scrollToTop()">Back to Top</button>`;
+   <div class="button-row">
+    <button class="explanation-button" onclick="scrollToAbout()">About Relativotey</button>
+    <button class="explanation-button" onclick="scrollToTop()">Back to Top</button>
+   </div>`;
 
    $('#explanation').html(explanation);
 
@@ -509,6 +512,14 @@ function googleAPICallback() {
 
 function scrollToExplanation() {
     document.querySelector('#bottom-container').scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+        inline: 'nearest'
+    });
+}
+
+function scrollToAbout() {
+    document.querySelector('#about').scrollIntoView({
         behavior: 'smooth',
         block: 'start',
         inline: 'nearest'
