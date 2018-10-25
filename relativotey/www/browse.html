@@ -394,7 +394,7 @@
 		 function displayLegendForStateAndDistrict(state, districtNumber, x, y) {
 		     var data = lookupRatioByDistrict(state, districtNumber);
 		     // district: ${district.state} ${district.number}<br> 
-		     var stuff = `<table border=0><tr><th colspan=2>${state} district ${districtNumber}<tr><td align=left>Voting Population:<td align=left>${numberWithCommas(data.population)}<tr><td align=left>Voted Last Election:<td align=left>${numberWithCommas(data.voted)}<tr><td align=left>Your Vote has power of:<td align=left style="background-color:orange"><b>${data.ratio.toPrecision(2)} voters</b></table>`;
+		     var stuff = `<table border=0><tr><th colspan=2>${state} district ${districtNumber}<tr><td align=left>Total Population:<td align=left>${numberWithCommas(data.population)}<tr><td align=left>Voted Last Election:<td align=left>${numberWithCommas(data.voted)}<tr><td align=left>Your Vote has power of:<td align=left style="background-color:orange"><b>${data.ratio.toPrecision(2)} voters</b></table>`;
 		     console.log(stuff);
 		     $('#legend').html(stuff);
 		     $('#legend').show();

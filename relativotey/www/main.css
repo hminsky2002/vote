@@ -45,6 +45,10 @@ a {
     text-decoration: none;
 }
 
+.credits{
+    color: blue !important;
+}
+
 a:hover { 
     color: #D80649;
     text-decoration: none;
@@ -276,7 +280,7 @@ a:hover {
     margin: 20px 0;
     padding: 20px;
     width: 80vw;
-    display: flex;
+    display: inline;
     flex-direction: column;
     justify-content: center;
     align-items: center;
