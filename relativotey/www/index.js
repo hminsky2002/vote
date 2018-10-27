@@ -141,7 +141,7 @@ function showVoterInfo(stateAbbrev, district) {
     $("#loading-screen").hide();
 
     // Make this string safe to pass in URL
-    var encodedState = encodeURI(abbrevToStateName(stateAbbrev));
+    var encodedState = encodeURIComponent(abbrevToStateName(stateAbbrev));
     // TODO url is hardcoded for development. Remove "https://www.relativotey.org/" in production.
     var state = abbrevToStateName(stateAbbrev);
 
@@ -248,10 +248,10 @@ function showVoterInfo(stateAbbrev, district) {
    // how to post to twitter:
    // http://twitter.com/share?text=text goes here&url=http://url goes here&hashtags=hashtag1,hashtag2,hashtag3
 
-   var twitter_text = encodeURI(`My vote in ${districtPretty} ${state} counts for ${data.ratio.toPrecision(2)} people. How many people are you voting for in November? I'm tagging ${data.ratio.toPrecision(1)} people to check this out and pass it on: relativotey.org #showup`);
+   var twitter_text = encodeURIComponent(`My vote in ${districtPretty} ${state} counts for ${data.ratio.toPrecision(2)} people. How many people are you voting for in November? I'm tagging ${data.ratio.toPrecision(1)} people to check this out and pass it on: relativotey.org #showup`);
 
-   var twitter_url = encodeURI(`http://www.relativotey.org`);
-   var hashtags = encodeURI("#relativotey,#vote");
+   var twitter_url = encodeURIComponent(`https://www.relativotey.org`);
+					 var hashtags = encodeURIComponent("relativotey,vote,showup");
 
    var shareVotingPower = `<p class="vote-box-text">Share your voting power:</p>
    <div class="vote-box-icons">
