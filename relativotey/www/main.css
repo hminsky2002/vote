@@ -236,18 +236,40 @@ a:hover {
     width: 80vw;
 }
 
+.explanation-header-container {
+    margin: 10px;
+}
 .explanation-header {
     font-size: 2em;
+}
+h2.explanation-header {
+    margin: 0;
+    line-height: 1.5;
+}
+
+.explanation-group-block {
+    display: flex;
+    flex-direction: row;
+}
+
+.explanation-group {
+    display: flex;
+    flex-direction: column;
 }
 
 .explanation-text {
     font-size: 2em;
+    padding: 0 5%;
 }
 
 .explanation-number {
     color: blue;
     font-size: 3em;
     font-weight: bold;
+}
+
+.explanation-number p {
+    margin: 0;
 }
 
 .explanation-button {
@@ -366,6 +388,9 @@ a:hover {
     }
     #people img {
         width: 60px;
+    }
+    .explanation-group-block {
+        flex-direction: column;
     }
     #vote-encourage-mobile {
         background-color: lightgreen;
