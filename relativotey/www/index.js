@@ -218,15 +218,23 @@ function showVoterInfo(stateAbbrev, district) {
 
    $("#caption").html(caption);
 
-   var explanation = `<h2 class="explanation-header">How Your Vote Counts</h2>
-   <h2 class="explanation-header">in ${districtPretty} ${state}</h2>
-   <div class="explanation-text"><p>Out of a total district population of</p></div>
-   <div class="explanation-number"><p>${data.population.toLocaleString()}</p></div>
-   <div class="explanation-text"><p>the number of people who voted in the 2014 election is</p></div>
-   <div class="explanation-number"><p>${data.voted.toLocaleString()}</p></div>
-   <div class="explanation-text"><p>and each one of those voters represented</p></div>
-   <div class="explanation-number"><p>${data.ratio.toPrecision(3)}</p></div>
-   <div class="explanation-text"><p>people with their voice.</p></div>
+   var explanation = `<div class="explanation-header-container"><h2 class="explanation-header">How Your Vote Counts</h2>
+   <h2 class="explanation-header">in ${districtPretty} ${state}</h2></div>
+   <div class="explanation-group-block">
+    <div class="explanation-group">
+        <div class="explanation-text"><p>Out of a total district population of</p></div>
+        <div class="explanation-number"><p>${data.population.toLocaleString()}</p></div>
+    </div>
+    <div class="explanation-group">
+        <div class="explanation-text"><p>the number of people who voted in the 2014 election is</p></div>
+        <div class="explanation-number"><p>${data.voted.toLocaleString()}</p></div>
+    </div>
+    <div class="explanation-group">
+        <div class="explanation-text"><p>and each one of those voters represented</p></div>
+        <div class="explanation-number"><p>${data.ratio.toPrecision(3)}</p></div>
+        <div class="explanation-text"><p>people with their voice.</p></div>
+    </div>
+   </div>
    <div class="button-row">
     <button class="explanation-button" onclick="scrollToAbout()">About Relativotey</button>
     <button class="explanation-button" onclick="scrollToTop()">Back to Top</button>
