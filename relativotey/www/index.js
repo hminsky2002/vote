@@ -242,7 +242,7 @@ function showVoterInfo(stateAbbrev, district) {
 
    $('#explanation').html(explanation);
 
-   var encourageToVote = `<p class="vote-box-text">Now that you've seen how many people your vote effects, do you pledge to vote this november and make your voice count?</p>
+   var encourageToVote = `<p class="vote-box-text">Now that you've seen how many people your vote affects, do you pledge to vote this November and make your voice count?</p>
    <form class="vote-encourage-form" action="/sql/survey">
         <input type="hidden" name="question" value="encouraged_to_vote"/>
        <input type="radio" name="response" id="encourage-yes" value="Yes">
