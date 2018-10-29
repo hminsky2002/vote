@@ -141,7 +141,7 @@ function showVoterInfo(stateAbbrev, district) {
     $("#loading-screen").hide();
 
     // Make this string safe to pass in URL
-    var encodedState = encodeURI(abbrevToStateName(stateAbbrev));
+    var encodedState = encodeURIComponent(abbrevToStateName(stateAbbrev));
     // TODO url is hardcoded for development. Remove "https://www.relativotey.org/" in production.
     var state = abbrevToStateName(stateAbbrev);
 
@@ -218,15 +218,23 @@ function showVoterInfo(stateAbbrev, district) {
 
    $("#caption").html(caption);
 
-   var explanation = `<h2 class="explanation-header">How Your Vote Counts</h2>
-   <h2 class="explanation-header">in ${districtPretty} ${state}</h2>
-   <div class="explanation-text"><p>Out of a total district population of</p></div>
-   <div class="explanation-number"><p>${data.population.toLocaleString()}</p></div>
-   <div class="explanation-text"><p>the number of people who voted in the 2014 election is</p></div>
-   <div class="explanation-number"><p>${data.voted.toLocaleString()}</p></div>
-   <div class="explanation-text"><p>and each one of those voters represented</p></div>
-   <div class="explanation-number"><p>${data.ratio.toPrecision(3)}</p></div>
-   <div class="explanation-text"><p>people with their voice.</p></div>
+   var explanation = `<div class="explanation-header-container"><h2 class="explanation-header">How Your Vote Counts</h2>
+   <h2 class="explanation-header">in ${districtPretty} ${state}</h2></div>
+   <div class="explanation-group-block">
+    <div class="explanation-group">
+        <div class="explanation-text"><p>Out of a total district population of</p></div>
+        <div class="explanation-number"><p>${data.population.toLocaleString()}</p></div>
+    </div>
+    <div class="explanation-group">
+        <div class="explanation-text"><p>the number of people who voted in the 2014 election is</p></div>
+        <div class="explanation-number"><p>${data.voted.toLocaleString()}</p></div>
+    </div>
+    <div class="explanation-group">
+        <div class="explanation-text"><p>and each one of those voters represented</p></div>
+        <div class="explanation-number"><p>${data.ratio.toPrecision(3)}</p></div>
+        <div class="explanation-text"><p>people with their voice.</p></div>
+    </div>
+   </div>
    <div class="button-row">
     <button class="explanation-button" onclick="scrollToAbout()">About Relativotey</button>
     <button class="explanation-button" onclick="scrollToTop()">Back to Top</button>
@@ -234,7 +242,7 @@ function showVoterInfo(stateAbbrev, district) {
 
    $('#explanation').html(explanation);
 
-   var encourageToVote = `<p class="vote-box-text">Now that you've seen how many people your vote effects, do you pledge to vote this november and make your voice count?</p>
+   var encourageToVote = `<p class="vote-box-text">Now that you've seen how many people your vote affects, do you pledge to vote this November and make your voice count?</p>
    <form class="vote-encourage-form" action="/sql/survey">
         <input type="hidden" name="question" value="encouraged_to_vote"/>
        <input type="radio" name="response" id="encourage-yes" value="Yes">
@@ -248,10 +256,10 @@ function showVoterInfo(stateAbbrev, district) {
    // how to post to twitter:
    // http://twitter.com/share?text=text goes here&url=http://url goes here&hashtags=hashtag1,hashtag2,hashtag3
 
-   var twitter_text = encodeURI(`My vote in ${districtPretty} ${state} would count for ${data.ratio.toPrecision(2)} people. How many people are you voting for in November? I’m tagging ${data.ratio.toPrecision(1)} people to check this out and pass it on: relativotey.org #showup`);
+   var twitter_text = encodeURIComponent('My vote in ${districtPretty} ${state} counts for ${data.ratio.toPrecision(2)} people. How many people are you voting for in November? I'm tagging ${data.ratio.toPrecision(1)} people to check this out and pass it on: relativotey.org #showup');
 
-   var twitter_url = encodeURI(`http://www.relativotey.org`);
-   var hashtags = encodeURI("#relativotey,#vote");
+   var twitter_url = encodeURIComponent(`https://www.relativotey.org`);
+					 var hashtags = encodeURIComponent("relativotey,vote,showup");
 
    var shareVotingPower = `<p class="vote-box-text">Share your voting power:</p>
    <div class="vote-box-icons">
