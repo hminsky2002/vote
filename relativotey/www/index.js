@@ -204,7 +204,12 @@ function showVoterInfo(stateAbbrev, district) {
             districtOrState = "state";
         }
 
+	if (ratioStringForCaption == '0%') {
+	    // need more specific address to find district 
+            caption = `We couldn't uniquely locate your district from the address you entered, please enter a more specific street address`;
+	} else {
         caption = `Based on data from the 2014 Congressional election, by voting in ${districtPretty} ${state}, you'd have represented <b><i>${ratioStringForCaption}</i></b> members of your ${districtOrState} with your voice.`;
+	}
 
     }  else {
         // No election data, either no state was entered or there's no data for it
