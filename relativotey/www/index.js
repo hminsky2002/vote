@@ -9,6 +9,11 @@ $(document).ready(function(){
         }
     });
 
+    $("#lbutton").click( (event) => {
+	console.log("user clicked lbutton");
+        lookupStateFromInput(event);
+    });
+
     $("#userAddress").keypress(function( event ) {
         if ( event.which == 13 ) {
             lookupStateFromInput();
@@ -283,10 +288,6 @@ function browseDisticts() {
 
 function initMap() {
     geocoder = new google.maps.Geocoder;
-    $("#lbutton").click( (event) => {
-	console.log("user clicked lbutton");
-        lookupStateFromInput(event);
-    });
     $("#locator").click(geolocate);
     
 }
