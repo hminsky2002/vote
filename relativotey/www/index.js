@@ -24,6 +24,8 @@ $(document).ready(function(){
 var map;
 var pos, addr, geocoder;
 var electionData = null;
+var stateAbbrev = '';
+
 
 // Enables manual district selection screen.
 function changeToManualScreen() {
@@ -278,13 +280,14 @@ function showVoterInfo(stateAbbrev, district) {
 }
 
 function browseDisticts() {
-	    window.location.href = `browse.html#state=${stateAbbrev}`;
+    window.location.href = `browse.html#state=${stateAbbrev}`;
 }
 
 
 function initMap() {
     geocoder = new google.maps.Geocoder;
     $("#lbutton").click( (event) => {
+	console.log("user clicked lbutton");
         lookupStateFromInput(event);
     });
     $("#locator").click(geolocate);
