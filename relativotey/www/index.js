@@ -9,11 +9,6 @@ $(document).ready(function(){
         }
     });
 
-    $("#state").change(function( event ) {
-        console.log(`ondocument.ready: #state menu changed, looking up ${$("#state").val()}`);
-        lookupStateFromInput();
-    });
-    
     $("#userAddress").keypress(function( event ) {
         if ( event.which == 13 ) {
             lookupStateFromInput();
@@ -25,6 +20,8 @@ var map;
 var pos, addr, geocoder;
 var electionData = null;
 var stateAbbrev = '';
+
+var inMainRelativoteyAppPage = true;
 
 
 // Enables manual district selection screen.
@@ -298,7 +295,7 @@ function initMap() {
 Grab the STATE from input text field, and look up using geocoder, display on map
  */
 function lookupStateFromInput(event) {
-    event.preventDefault();
+    //event.preventDefault();
     $("#load-data-manual").hide();
     $("#loading-screen").show();
     var state = $("#state").val();
