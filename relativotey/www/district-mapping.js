@@ -49,16 +49,19 @@ $( document ).ready(
 	//** INTERACTIVE MENU
 	// Create an event listener that responds to the selection of a state from the menu
 	$('#state').change(function() {
+           if (!inMainRelativoteyAppPage) {
+
 	    if (this.value === '') { window.location.hash = '#' }
 	    else {
 		var hash = window.location.hash;
 		var newHash = 'state=' + this.value;
 		window.location.hash = newHash;
 	    }
+	   }
 	});
 
 	// set default menu selection to Massachusetts
-	$("#state").val("MA");
+	//$("#state").val("MA");
 	
 	//** INTERACTIVE MENU
 	// Create an event listener that responds to the selection of a district from the menu
