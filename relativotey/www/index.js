@@ -19,6 +19,15 @@ $(document).ready(function(){
             lookupStateFromInput();
         }
     });
+
+    $( "#display-data" ).mouseout(function() {
+	$( "#display-data" ).css( {opacity:0.15} );
+    });
+
+    $( "#display-data" ).mouseover(function() {
+	$( "#display-data" ).css( {opacity:1} );
+    });
+
 });
 
 var map;
