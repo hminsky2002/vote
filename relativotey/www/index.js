@@ -530,7 +530,7 @@ function zeroPad(num, places) {
  * Initialize the API client and make a request.
  */
 function googleAPICallback() {
-    gapi.client.setApiKey('AIzaSyCzPmoqSuBu_wgzwuRauq0V0LQYtY919Ik');
+    gapi.client.setApiKey('AIzaSyCz8GRaEBPG9rUfHIbeT45rABVlzRfiR_Y');
 }
 
 function scrollToExplanation() {
